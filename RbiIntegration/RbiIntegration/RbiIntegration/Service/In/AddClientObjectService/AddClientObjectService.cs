@@ -1,6 +1,7 @@
 ﻿using RbiIntegration.Service.BaseClasses;
-using RbiIntegration.Service.In.CreateClientObjectRelationService.Model.Request;
-using RbiIntegration.Service.In.CreateClientObjectRelationService.Model.Response;
+using RbiIntegration.Service.In.AddClientObjectService.Model;
+using RbiIntegration.Service.In.AddClientObjectService.Model.Request;
+using RbiIntegration.Service.In.AddClientObjectService.Model.Response;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -12,23 +13,24 @@ using System.Threading.Tasks;
 using Terrasoft.Core.Entities;
 using Terrasoft.Web.Common;
 using static RbiIntegration.Service.BaseClasses.CrmConstants;
+using RbiIntegration.Service.BaseClasses.Extensions;
 
-namespace RbiIntegration.Service.In.CreateClientObjectRelationService
+namespace RbiIntegration.Service.In.AddClientObjectService
 {
     /// <summary>
-    /// Сервис создания связи клиента с помещением
+    /// Сервис добавления помещения клиенту
     /// </summary>
     [ServiceContract]
     [AspNetCompatibilityRequirements(RequirementsMode = AspNetCompatibilityRequirementsMode.Required)]
-    public class CreateClientObjectRelationService : BaseService
+    public class AddClientObjectService : BaseService
     {
         [WebInvoke(Method = "POST", RequestFormat = WebMessageFormat.Json, BodyStyle = WebMessageBodyStyle.Wrapped,
         ResponseFormat = WebMessageFormat.Json)]
-        public BaseResponse CreateClientObjectRelation(CreateClientObjectRelationServiceRequestModel requestModel)
+        public BaseResponse AddClientObject(AddClientObjectServiceRequestModel requestModel)
         {
             DateTime requestInitDate = DateTime.Now;
 
-            var res = new CreateClientObjectRelationServiceResponseModel();
+            var res = new AddClientObjectServiceResponseModel();
             var request = IntegrationServiceHelper.ToJson(requestModel);
 
             var uid = string.Empty;
@@ -39,15 +41,50 @@ namespace RbiIntegration.Service.In.CreateClientObjectRelationService
                 Entity contact = null;
                 Entity contactRoleForObject = null;
                 Entity product = null;
+
                 try
                 {
-                    contact = IntegrationServiceHelper.FindLookupItem(this.UserConnection, "Contact", requestModel.TrcContactId, "Id", false, false).Entity;
+                    contact = IntegrationServiceHelper.GetEntityByField(this.UserConnection, "Contact", "Id", requestModel.TrcContactId);
                 }
-                catch (Exception ex)
+                catch
                 {
-                    res.Result = false;
-                    res.Code = 104002;
-                    res.ReasonPhrase = $"Контакт с id {requestModel.TrcContactId} не найден";
+                }
+
+                if (contact == null)
+                {
+                    if (requestModel.Phones == null || requestModel.Phones.Length < 1 || requestModel.Phones.Count(e => e.Basic) < 1)
+                    {
+                        throw new Exception("В запросе отстутствует основной номер телефона");
+                    }
+
+                    var phone = requestModel.Phones.First(e => e.Basic).Phone;
+
+                    var reversedPhone = IntegrationServiceHelper.GetReversedPhone(phone);
+
+                    var esq = new EntitySchemaQuery(this.UserConnection.EntitySchemaManager, "ContactCommunication");
+
+                    esq.AddColumn("Contact");
+
+                    esq.Filters.Add(esq.CreateFilterWithParameters(FilterComparisonType.Equal, "SearchNumber", reversedPhone));
+
+                    var entities = esq.GetEntityCollection(this.UserConnection);
+
+                    if (entities.Count < 1)
+                    {
+                        res.Result = false;
+                        res.Code = 104001;
+                        res.ReasonPhrase = $"Контакт с номером {phone} не найден";
+                    }
+                    else if (entities.Count > 1)
+                    {
+                        res.Result = false;
+                        res.Code = 104001;
+                        res.ReasonPhrase = $"Найдено более одного контакта с номером {phone}";
+                    }
+                    else
+                    {
+                        contact = entities.First();
+                    }
                 }
 
                 if (contact != null)
@@ -68,13 +105,13 @@ namespace RbiIntegration.Service.In.CreateClientObjectRelationService
                 {
                     try
                     {
-                        product = IntegrationServiceHelper.FindLookupItem(this.UserConnection, "Product", requestModel.TrcObjectId, "Id", false, false).Entity;
+                        product = IntegrationServiceHelper.FindLookupItem(this.UserConnection, "Product", requestModel.ProductId, "Id", false, false).Entity;
                     }
                     catch (Exception ex)
                     {
                         res.Result = false;
                         res.Code = 104004;
-                        res.ReasonPhrase = $"Объект с id {requestModel.TrcObjectId} не найден";
+                        res.ReasonPhrase = $"Объект с id {requestModel.ProductId} не найден";
                     }
                 }
 
@@ -82,13 +119,14 @@ namespace RbiIntegration.Service.In.CreateClientObjectRelationService
                 {
                     var connectionObjectWithContact = IntegrationServiceHelper.InsertEntityWithFields(this.UserConnection, "TrcConnectionObjectWithContact", new Dictionary<string, object>()
                     {
-                        { "TrcObjectId", requestModel.TrcObjectId },
+                        { "TrcObjectId", requestModel.ProductId },
                         { "TrcContactId", requestModel.TrcContactId },
                         { "TrcCreatedByDomopult", true }
                     });
 
                     res.TrcConnectionObjectWithContactId = connectionObjectWithContact.PrimaryColumnValue.ToString();
                 }
+
             }
             catch (Exception ex)
             {
@@ -100,11 +138,10 @@ namespace RbiIntegration.Service.In.CreateClientObjectRelationService
             }
             finally
             {
-                IntegrationServiceHelper.Log(UserConnection, new IntegrationServiceParams() { Id = TrcIntegrationServices.CreateClientObjectRelation }, requestInitDate, title, uid, res.Exception, request, IntegrationServiceHelper.ToJson(res), res != null ? res.Code : 0);
+                IntegrationServiceHelper.Log(UserConnection, new IntegrationServiceParams() { Id = TrcIntegrationServices.CheckClientExisting }, requestInitDate, title, uid, res.Exception, request, IntegrationServiceHelper.ToJson(res));
             }
 
             return res;
         }
-
     }
 }

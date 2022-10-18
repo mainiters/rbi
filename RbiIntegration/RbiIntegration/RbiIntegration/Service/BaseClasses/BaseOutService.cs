@@ -120,7 +120,7 @@ namespace RbiIntegration.Service.BaseClasses
             {
                 responseStr = JsonConvert.SerializeObject(resultObject);
 
-                IntegrationServiceHelper.Log(this._userConnection, this._serviceParams, requestInitDate, title, uid, resultObject == null ? string.Empty : resultObject.Exception, requestStr, responseStr, 0);
+                IntegrationServiceHelper.Log(this._userConnection, this._serviceParams, requestInitDate, title, uid, resultObject == null ? string.Empty : resultObject.Exception, requestStr, responseStr);
             }
 
             return resultObject;

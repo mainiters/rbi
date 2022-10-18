@@ -263,16 +263,16 @@ namespace RbiIntegration.Service.BaseClasses
         /// <param name="errorStr">Текст ошибки</param>
         /// <param name="requestStr">Запрос</param>
         /// <param name="responseStr">Ответ</param>
-        public static void Log(UserConnection userConnection, IntegrationServiceParams serviceParams, DateTime requestInitDate, string title, string uid, string errorStr, string requestStr, string responseStr, int code)
+        public static void Log(UserConnection userConnection, IntegrationServiceParams serviceParams, DateTime requestInitDate, string title, string uid, string errorStr, string requestStr, string responseStr)
         {
             var ms = (int)(DateTime.Now - requestInitDate).TotalMilliseconds;
 
             var insert = new Insert(userConnection)
-                    .Into("TrcLogIntegration")
+                    .Into("TrcIntagrationLog")
                     .Set("TrcName", Column.Parameter(title == null ? string.Empty : title))
                     .Set("TrcError", Column.Parameter(errorStr))
                     .Set("TrcRequest", Column.Parameter(requestStr))
-                    .Set("TrcCode", Column.Parameter(code))
+                    .Set("TrcBarcode", Column.Parameter(uid == null ? string.Empty : uid))
                     .Set("TrcRequestDuration", Column.Parameter(ms))
                     .Set("TrcResponse", Column.Parameter(responseStr));
 

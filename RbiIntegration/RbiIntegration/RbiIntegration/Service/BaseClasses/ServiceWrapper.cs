@@ -72,7 +72,7 @@ namespace RbiIntegration.Service.BaseClasses
             {
                 errorStr = $"{ex.Message} /n{ex.StackTrace}";
 
-                IntegrationServiceHelper.Log(this._userConnection, serviceParams, requestInitDate, null, uid, errorStr, string.Empty, string.Empty, 0);
+                IntegrationServiceHelper.Log(this._userConnection, serviceParams, requestInitDate, null, uid, errorStr, string.Empty, string.Empty);
             }
 
             return null;
