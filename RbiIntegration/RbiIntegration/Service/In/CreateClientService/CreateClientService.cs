@@ -118,6 +118,7 @@ namespace RbiIntegration.Service.In.CreateClientService
                     {
                         response.ReasonPhrase = $"Обязательное поле Basic не заполнено";
                         response.Code = 304001;
+                        response.Result = false;
                         return;
                     }
 
@@ -125,6 +126,7 @@ namespace RbiIntegration.Service.In.CreateClientService
                     {
                         response.ReasonPhrase = $"Обязательное поле Phone не заполнено";
                         response.Code = 304001;
+                        response.Result = false;
                         return;
                     }
                 }

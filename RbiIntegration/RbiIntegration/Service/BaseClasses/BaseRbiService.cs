@@ -47,6 +47,11 @@ namespace RbiIntegration.Service.BaseClasses
                 this.InitRequiredFields(this.RequiredFields);
                 this.CheckRequiredFields(requestModel, response);
                 
+                if(!response.Result)
+                {
+                    return response;
+                }
+
                 this.ProcessBusinessLogic(requestModel, response);
             }
             catch (Exception ex)
@@ -92,6 +97,7 @@ namespace RbiIntegration.Service.BaseClasses
                 {
                     response.ReasonPhrase = $"Обязательное поле {item} не заполнено";
                     response.Code = 304001;
+                    response.Result = false;
                     return;
                 }
             }

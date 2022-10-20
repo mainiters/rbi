@@ -30,7 +30,10 @@ namespace RbiIntegration.Service.In.CheckClientExistingService
         {
             if (requestModel.Phones == null || requestModel.Phones.Length < 1 || requestModel.Phones.Count(e => e.Basic == true) < 1)
             {
-                throw new Exception("В запросе отстутствует основной номер телефона");
+                response.Result = false;
+                response.Code = 304001;
+                response.ReasonPhrase = "В запросе отстутствует основной номер телефона";
+                return response;
             }
 
             var phone = requestModel.Phones.First(e => e.Basic == true).Phone;
@@ -82,6 +85,7 @@ namespace RbiIntegration.Service.In.CheckClientExistingService
                     {
                         response.ReasonPhrase = $"Обязательное поле Basic не заполнено";
                         response.Code = 304001;
+                        response.Result = false;
                         return;
                     }
 
@@ -89,6 +93,7 @@ namespace RbiIntegration.Service.In.CheckClientExistingService
                     {
                         response.ReasonPhrase = $"Обязательное поле Phone не заполнено";
                         response.Code = 304001;
+                        response.Result = false;
                         return;
                     }
                 }
