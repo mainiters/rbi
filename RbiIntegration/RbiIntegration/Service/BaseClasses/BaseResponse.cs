@@ -31,11 +31,26 @@ namespace RbiIntegration.Service.BaseClasses
         [DataMember]
         public string Message { get; set; }
 
+
         /// <summary>
         /// Описание
         /// </summary>
         [DataMember]
-        public string ReasonPhrase { get; set; }
+        public string ReasonPhrase
+        {
+            get
+            {
+                return reasonPhrase;
+            }
+
+            set
+            {
+                reasonPhrase = value;
+                Exception = value;
+            }
+        }
+        
+        protected string reasonPhrase;
 
         /// <summary>
         /// Ошибка

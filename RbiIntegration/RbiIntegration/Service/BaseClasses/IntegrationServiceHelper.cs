@@ -41,12 +41,52 @@ namespace RbiIntegration.Service.BaseClasses
         /// <returns>Номер телефона для поиска</returns>
         public static string GetReversedPhone(string phone)
         {
+            phone = CleanStringOfNonDigits(phone);
+
             if (phone.Length == 11 && phone[0] == '8')
             {
                 phone = "7" + phone.Substring(1);
             }
 
             return phone.CustomReverse();
+        }
+
+        /// <summary>
+        /// Очистка строки от всех символов кроме цифр
+        /// </summary>
+        /// <param name="s"></param>
+        /// <returns></returns>
+        public static string CleanStringOfNonDigits(string s)
+        {
+            if (string.IsNullOrEmpty(s))
+            {
+                return s;
+            }
+            
+            StringBuilder sb = new StringBuilder(s);
+            
+            int j = 0;
+            int i = 0;
+            
+            while (i < sb.Length)
+            {
+                bool isDigit = char.IsDigit(sb[i]);
+
+                if (isDigit)
+                {
+                    sb[j++] = sb[i++];
+                }
+                else
+                {
+                    ++i;
+                }
+            }
+
+            sb.Length = j;
+            
+            string cleaned = sb.ToString();
+            
+            return cleaned;
         }
 
         /// <summary>

@@ -12,7 +12,7 @@ namespace RbiIntegration.Service.In.RemoveClientProfileService.Model.Request
     /// Модель запроса
     /// </summary>
     [DataContract]
-    public class RemoveClientProfileServiceRequestModel
+    public class RemoveClientProfileServiceRequestModel : BaseModel
     {
         /// <summary>
         /// ИД контакта

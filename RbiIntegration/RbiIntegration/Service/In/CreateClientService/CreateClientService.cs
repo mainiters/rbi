@@ -20,59 +20,43 @@ namespace RbiIntegration.Service.In.CreateClientService
     /// </summary>
     [ServiceContract]
     [AspNetCompatibilityRequirements(RequirementsMode = AspNetCompatibilityRequirementsMode.Required)]
-    public class CreateClientService : BaseService
+    public class CreateClientService : BaseRbiService<CreateClientServiceRequestModel, CreateClientServiceResponseModel>
     {
         [WebInvoke(Method = "POST", RequestFormat = WebMessageFormat.Json, BodyStyle = WebMessageBodyStyle.Wrapped,
         ResponseFormat = WebMessageFormat.Json)]
-        public BaseResponse CreateClient(CreateClientServiceRequestModel requestModel)
+        protected override CreateClientServiceResponseModel ProcessBusinessLogic(CreateClientServiceRequestModel requestModel, CreateClientServiceResponseModel response)
         {
-            DateTime requestInitDate = DateTime.Now;
-
-            var res = new CreateClientServiceResponseModel();
-            var request = IntegrationServiceHelper.ToJson(requestModel);
-
-            var uid = string.Empty;
-            var title = string.Empty;
-
-            try
+            var values = new Dictionary<string, object>()
             {
-                var values = new Dictionary<string, object>()
-                {
-                    { "Name", requestModel.Name },
-                    { "TrcDomopultID", requestModel.TrcDomopultID },
-                    { "TrcDomopultCreatedOn", DateTime.Parse(requestModel.TrcDomopultCreatedOn) }
-                };
+                { "Name", requestModel.Name },
+                { "TrcDomopultID", requestModel.TrcDomopultID },
+                { "TrcDomopultCreatedOn", DateTime.Parse(requestModel.TrcDomopultCreatedOn) }
+            };
 
-                if (requestModel.Phones != null && requestModel.Phones.Length > 0 && requestModel.Phones.Count(e => e.Basic) > 0)
-                {
-                    values.Add("MobilePhone", IntegrationServiceHelper.MaskPhone(requestModel.Phones.First(e => e.Basic).Phone));
-                }
+            var contact = IntegrationServiceHelper.InsertEntityWithFields(this.UserConnection, "Contact", values);
 
-                if (requestModel.Emails != null && requestModel.Emails.Length > 0 && requestModel.Emails.Count(e => e.Basic) > 0)
-                {
-                    values.Add("Email", requestModel.Emails.First(e => e.Basic).Email);
-                }
+            response.TrcContactId = contact.PrimaryColumnValue.ToString();
 
-                var contact = IntegrationServiceHelper.InsertEntityWithFields(this.UserConnection, "Contact", values);
+            ProcessCommunications(requestModel, contact.PrimaryColumnValue);
 
-                res.TrcContactId = contact.PrimaryColumnValue.ToString();
+            var communicationsDict = new Dictionary<string, object>();
 
-                ProcessCommunications(requestModel, contact.PrimaryColumnValue);
-            }
-            catch (Exception ex)
+            if (requestModel.Phones != null && requestModel.Phones.Length > 0 && requestModel.Phones.Count(e => e.Basic == true) > 0)
             {
-                res.Code = 500;
-                res.Message = "ERROR";
-                res.Exception = ex.Message;
-                res.StackTrace = ex.StackTrace;
-                res.Result = false;
-            }
-            finally
-            {
-                IntegrationServiceHelper.Log(UserConnection, new IntegrationServiceParams() { Id = TrcIntegrationServices.CreateClient }, requestInitDate, title, uid, res.Exception, request, IntegrationServiceHelper.ToJson(res), res != null ? res.Code : 0);
+                communicationsDict.Add("MobilePhone", IntegrationServiceHelper.MaskPhone(requestModel.Phones.First(e => e.Basic == true).Phone));
             }
 
-            return res;
+            if (requestModel.Emails != null && requestModel.Emails.Length > 0 && requestModel.Emails.Count(e => e.Basic) > 0)
+            {
+                communicationsDict.Add("Email", requestModel.Emails.First(e => e.Basic).Email);
+            }
+
+            if (communicationsDict.Count > 0)
+            {
+                IntegrationServiceHelper.InsertOrUpdateEntity(this.UserConnection, "Contact", "Id", contact.PrimaryColumnValue, communicationsDict);
+            }
+
+            return response;
         }
 
         /// <summary>
@@ -86,7 +70,7 @@ namespace RbiIntegration.Service.In.CreateClientService
             {
                 if (requestModel.Phones != null && requestModel.Phones.Length > 0)
                 {
-                    foreach (var item in requestModel.Phones.Where(e => !e.Basic))
+                    foreach (var item in requestModel.Phones.Where(e => !e.Basic == true))
                     {
                         IntegrationServiceHelper.InsertEntityWithFields(this.UserConnection, "ContactCommunication", new Dictionary<string, object>()
                         {
@@ -107,6 +91,41 @@ namespace RbiIntegration.Service.In.CreateClientService
                             { "Number", item.Email },
                             { "CommunicationTypeId", "ee1c85c3-cfcb-df11-9b2a-001d60e938c6" }
                         });
+                    }
+                }
+            }
+        }
+
+        protected override void InitRequiredFields(List<string> requiredFields)
+        {
+            requiredFields.Add("Phones");
+            requiredFields.Add("TrcDomopultID");
+            requiredFields.Add("Name");
+            requiredFields.Add("ProductId");
+            requiredFields.Add("TrcContactRoleForObjectId");
+            requiredFields.Add("TrcDomopultCreatedOn");
+        }
+
+        protected override void CheckRequiredFields(CreateClientServiceRequestModel request, CreateClientServiceResponseModel response)
+        {
+            base.CheckRequiredFields(request, response);
+
+            if (response.Result)
+            {
+                foreach (var item in request.Phones)
+                {
+                    if (item.Basic == null)
+                    {
+                        response.ReasonPhrase = $"Обязательное поле Basic не заполнено";
+                        response.Code = 304001;
+                        return;
+                    }
+
+                    if (string.IsNullOrEmpty(item.Phone))
+                    {
+                        response.ReasonPhrase = $"Обязательное поле Phone не заполнено";
+                        response.Code = 304001;
+                        return;
                     }
                 }
             }

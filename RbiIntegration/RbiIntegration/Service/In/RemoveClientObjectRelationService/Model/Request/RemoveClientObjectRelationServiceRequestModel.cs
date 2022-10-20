@@ -12,7 +12,7 @@ namespace RbiIntegration.Service.In.RemoveClientObjectRelationService.Model.Requ
     /// Модель запроса
     /// </summary>
     [DataContract]
-    public class RemoveClientObjectRelationServiceRequestModel
+    public class RemoveClientObjectRelationServiceRequestModel : BaseModel
     {
         /// <summary>
         /// ИД связи

@@ -33,12 +33,6 @@ namespace RbiIntegration.Service.In.AddClientObjectService.Model.Request
         public string TrcContactRoleForObjectId { get; set; }
 
         /// <summary>
-        /// Лицевой счет
-        /// </summary>
-        [DataMember]
-        public string TrcPersonalAccount { get; set; }
-
-        /// <summary>
         /// Телефоны
         /// </summary>
         [DataMember]

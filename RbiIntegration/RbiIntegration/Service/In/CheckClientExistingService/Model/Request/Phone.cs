@@ -17,7 +17,7 @@ namespace RbiIntegration.Service.In.CheckClientExistingService.Model.Request
         /// Признак основного телефона
         /// </summary>
         [DataMember]
-        public bool Basic { get; set; }
+        public bool? Basic { get; set; }
 
         /// <summary>
         /// Телефон

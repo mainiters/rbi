@@ -79,7 +79,7 @@ namespace RbiIntegration.Service.BaseClasses
         }
 
         /// <summary>
-        /// Получение кслиента сервиса по параметрам
+        /// Получение клиента сервиса по параметрам
         /// </summary>
         /// <param name="serviceParams"></param>
         /// <returns></returns>

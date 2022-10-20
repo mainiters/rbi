@@ -12,7 +12,7 @@ namespace RbiIntegration.Service.In.CreateClientObjectRelationService.Model.Requ
     /// Модель запроса
     /// </summary>
     [DataContract]
-    public class CreateClientObjectRelationServiceRequestModel
+    public class CreateClientObjectRelationServiceRequestModel : BaseModel
     {
         /// <summary>
         /// Id Контакта в CRM

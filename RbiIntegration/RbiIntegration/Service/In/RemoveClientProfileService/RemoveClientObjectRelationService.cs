@@ -21,53 +21,33 @@ namespace RbiIntegration.Service.In.RemoveClientProfileService
     /// </summary>
     [ServiceContract]
     [AspNetCompatibilityRequirements(RequirementsMode = AspNetCompatibilityRequirementsMode.Required)]
-    public class RemoveClientProfileService : BaseService
+    public class RemoveClientProfileService : BaseRbiService<RemoveClientProfileServiceRequestModel, RemoveClientProfileServiceResponseModel>
     {
         [WebInvoke(Method = "POST", RequestFormat = WebMessageFormat.Json, BodyStyle = WebMessageBodyStyle.Wrapped,
         ResponseFormat = WebMessageFormat.Json)]
-        public BaseResponse RemoveClientProfile(RemoveClientProfileServiceRequestModel requestModel)
+        protected override RemoveClientProfileServiceResponseModel ProcessBusinessLogic(RemoveClientProfileServiceRequestModel requestModel, RemoveClientProfileServiceResponseModel response)
         {
-            DateTime requestInitDate = DateTime.Now;
-
-            var res = new RemoveClientProfileServiceResponseModel();
-            var request = IntegrationServiceHelper.ToJson(requestModel);
-
-            var uid = string.Empty;
-            var title = string.Empty;
-
             try
             {
-                try
-                {
-                    var client = IntegrationServiceHelper.GetEntityByField(this.UserConnection, "Contact", "Id", requestModel.TrcContactId);
+                var client = IntegrationServiceHelper.GetEntityByField(this.UserConnection, "Contact", "Id", requestModel.TrcContactId);
 
-                    client.SetColumnValue("TrcDomopultDeletedOn", DateTime.Parse(requestModel.TrcDomopultDeletedOn));
+                client.SetColumnValue("TrcDomopultDeletedOn", DateTime.Parse(requestModel.TrcDomopultDeletedOn));
 
-                    client.Save(false);
-                }
-                catch (Exception ex)
-                {
-                    res.Result = false;
-                    res.Code = 104002;
-                    res.ReasonPhrase = $"Контакт с id {requestModel.TrcContactId} не найден";
-                }
-
+                client.Save(false);
             }
             catch (Exception ex)
             {
-                res.Code = 500;
-                res.Message = "ERROR";
-                res.Exception = ex.Message;
-                res.StackTrace = ex.StackTrace;
-                res.Result = false;
-            }
-            finally
-            {
-                IntegrationServiceHelper.Log(UserConnection, new IntegrationServiceParams() { Id = TrcIntegrationServices.CreateClientObjectRelation }, requestInitDate, title, uid, res.Exception, request, IntegrationServiceHelper.ToJson(res), res != null ? res.Code : 0);
+                response.Result = false;
+                response.Code = 104002;
+                response.ReasonPhrase = $"Контакт с id {requestModel.TrcContactId} не найден";
             }
 
-            return res;
+            return response;
         }
 
+        protected override void InitRequiredFields(List<string> requiredFields)
+        {
+
+        }
     }
 }

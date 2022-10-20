@@ -12,7 +12,7 @@ namespace RbiIntegration.Service.In.CreateClientService.Model.Request
     /// Модель запроса
     /// </summary>
     [DataContract]
-    public class CreateClientServiceRequestModel
+    public class CreateClientServiceRequestModel : BaseModel
     {
         /// <summary>
         /// Id Клиента в Домопульт
@@ -43,5 +43,18 @@ namespace RbiIntegration.Service.In.CreateClientService.Model.Request
         /// </summary>
         [DataMember]
         public string TrcDomopultCreatedOn { get; set; }
+
+        /// <summary>
+        /// ИД помещения
+        /// </summary>
+        [DataMember]
+        public string ProductId { get; set; }
+
+        /// <summary>
+        /// ИД связи контакта с помещением
+        /// </summary>
+        [DataMember]
+        public string TrcContactRoleForObjectId { get; set; }
+
     }
 }

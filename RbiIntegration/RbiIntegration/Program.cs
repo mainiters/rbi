@@ -5,6 +5,7 @@ using System.Net;
 using System.Text;
 using System.Threading.Tasks;
 using RbiIntegration;
+using RbiIntegration.Service.BaseClasses;
 
 namespace RbiIntegration
 {
@@ -12,6 +13,10 @@ namespace RbiIntegration
     {
         static void Main(string[] args)
         {
+            var phone = @"ad909-438-909-4";
+            
+            Console.WriteLine(IntegrationServiceHelper.GetReversedPhone(phone));
+
             Console.ReadLine();
         }
     }

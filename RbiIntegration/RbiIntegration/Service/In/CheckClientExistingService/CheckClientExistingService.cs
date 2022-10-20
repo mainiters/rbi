@@ -22,70 +22,77 @@ namespace RbiIntegration.Service.In.CheckClientExistingService
     /// </summary>
     [ServiceContract]
     [AspNetCompatibilityRequirements(RequirementsMode = AspNetCompatibilityRequirementsMode.Required)]
-    public class CheckClientExistingService : BaseService
+    public class CheckClientExistingService : BaseRbiService<CheckClientExistingServiceRequestModel, CheckClientExistingServiceResponseModel>
     {
         [WebInvoke(Method = "POST", RequestFormat = WebMessageFormat.Json, BodyStyle = WebMessageBodyStyle.Wrapped,
         ResponseFormat = WebMessageFormat.Json)]
-        public BaseResponse CheckClientExisting(CheckClientExistingServiceRequestModel requestModel)
+        protected override CheckClientExistingServiceResponseModel ProcessBusinessLogic(CheckClientExistingServiceRequestModel requestModel, CheckClientExistingServiceResponseModel response)
         {
-            DateTime requestInitDate = DateTime.Now;
-
-            var res = new CheckClientExistingServiceResponseModel();
-            var request = IntegrationServiceHelper.ToJson(requestModel);
-
-            var uid = string.Empty;
-            var title = string.Empty;
-
-            try
+            if (requestModel.Phones == null || requestModel.Phones.Length < 1 || requestModel.Phones.Count(e => e.Basic == true) < 1)
             {
-                if (requestModel.Phones == null || requestModel.Phones.Length < 1 || requestModel.Phones.Count(e => e.Basic) < 1)
+                throw new Exception("В запросе отстутствует основной номер телефона");
+            }
+
+            var phone = requestModel.Phones.First(e => e.Basic == true).Phone;
+
+            var reversedPhone = IntegrationServiceHelper.GetReversedPhone(phone);
+
+            var esq = new EntitySchemaQuery(this.UserConnection.EntitySchemaManager, "ContactCommunication");
+
+            esq.AddColumn("Contact");
+
+            esq.Filters.Add(esq.CreateFilterWithParameters(FilterComparisonType.Equal, "SearchNumber", reversedPhone));
+
+            var entities = esq.GetEntityCollection(this.UserConnection);
+
+            if (entities.Count < 1)
+            {
+                response.Result = false;
+                response.Code = 104001;
+                response.ReasonPhrase = $"Контакт с номером {phone} не найден";
+            }
+            else if (entities.Count > 1)
+            {
+                response.Result = false;
+                response.Code = 104001;
+                response.ReasonPhrase = $"Найдено более одного контакта с номером {phone}";
+            }
+            else
+            {
+                response.TrcContactId = entities.First().GetTypedColumnValue<string>("ContactId");
+            }
+
+            return response;
+        }
+
+        protected override void InitRequiredFields(List<string> requiredFields)
+        {
+            requiredFields.Add("Phones");
+        }
+
+        protected override void CheckRequiredFields(CheckClientExistingServiceRequestModel request, CheckClientExistingServiceResponseModel response)
+        {
+            base.CheckRequiredFields(request, response);
+
+            if (response.Result)
+            {
+                foreach (var item in request.Phones)
                 {
-                    throw new Exception("В запросе отстутствует основной номер телефона");
+                    if (item.Basic == null)
+                    {
+                        response.ReasonPhrase = $"Обязательное поле Basic не заполнено";
+                        response.Code = 304001;
+                        return;
+                    }
+
+                    if (string.IsNullOrEmpty(item.Phone))
+                    {
+                        response.ReasonPhrase = $"Обязательное поле Phone не заполнено";
+                        response.Code = 304001;
+                        return;
+                    }
                 }
-
-                var phone = requestModel.Phones.First(e => e.Basic).Phone;
-
-                var reversedPhone = IntegrationServiceHelper.GetReversedPhone(phone);
-
-                var esq = new EntitySchemaQuery(this.UserConnection.EntitySchemaManager, "ContactCommunication");
-
-                esq.AddColumn("Contact");
-
-                esq.Filters.Add(esq.CreateFilterWithParameters(FilterComparisonType.Equal, "SearchNumber", reversedPhone));
-
-                var entities = esq.GetEntityCollection(this.UserConnection);
-
-                if (entities.Count < 1)
-                {
-                    res.Result = false;
-                    res.Code = 104001;
-                    res.ReasonPhrase = $"Контакт с номером {phone} не найден";
-                } 
-                else if (entities.Count > 1)
-                {
-                    res.Result = false;
-                    res.Code = 104001;
-                    res.ReasonPhrase = $"Найдено более одного контакта с номером {phone}";
-                } 
-                else
-                {
-                    res.TrcContactId = entities.First().GetTypedColumnValue<string>("ContactId");
-                }
             }
-            catch (Exception ex)
-            {
-                res.Code = 500;
-                res.Message = "ERROR";
-                res.Exception = ex.Message;
-                res.StackTrace = ex.StackTrace;
-                res.Result = false;
-            }
-            finally
-            {
-                IntegrationServiceHelper.Log(UserConnection, new IntegrationServiceParams() { Id = TrcIntegrationServices.CheckClientExisting }, requestInitDate, title, uid, res.Exception, request, IntegrationServiceHelper.ToJson(res), res != null ? res.Code : 0);
-            }
-
-            return res;
         }
     }
 }

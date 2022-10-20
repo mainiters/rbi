@@ -20,91 +20,78 @@ namespace RbiIntegration.Service.In.CreateClientObjectRelationService
     /// </summary>
     [ServiceContract]
     [AspNetCompatibilityRequirements(RequirementsMode = AspNetCompatibilityRequirementsMode.Required)]
-    public class CreateClientObjectRelationService : BaseService
+    public class CreateClientObjectRelationService : BaseRbiService<CreateClientObjectRelationServiceRequestModel, CreateClientObjectRelationServiceResponseModel>
     {
         [WebInvoke(Method = "POST", RequestFormat = WebMessageFormat.Json, BodyStyle = WebMessageBodyStyle.Wrapped,
         ResponseFormat = WebMessageFormat.Json)]
-        public BaseResponse CreateClientObjectRelation(CreateClientObjectRelationServiceRequestModel requestModel)
+        protected override CreateClientObjectRelationServiceResponseModel ProcessBusinessLogic(CreateClientObjectRelationServiceRequestModel requestModel, CreateClientObjectRelationServiceResponseModel response)
         {
-            DateTime requestInitDate = DateTime.Now;
-
-            var res = new CreateClientObjectRelationServiceResponseModel();
-            var request = IntegrationServiceHelper.ToJson(requestModel);
-
-            var uid = string.Empty;
-            var title = string.Empty;
-
+            Entity contact = null;
+            Entity contactRoleForObject = null;
+            Entity product = null;
             try
             {
-                Entity contact = null;
-                Entity contactRoleForObject = null;
-                Entity product = null;
+                contact = IntegrationServiceHelper.FindLookupItem(this.UserConnection, "Contact", requestModel.TrcContactId, "Id", false, false).Entity;
+            }
+            catch (Exception ex)
+            {
+                response.Result = false;
+                response.Code = 104002;
+                response.ReasonPhrase = $"Контакт с id {requestModel.TrcContactId} не найден";
+            }
+
+            if (contact != null)
+            {
                 try
                 {
-                    contact = IntegrationServiceHelper.FindLookupItem(this.UserConnection, "Contact", requestModel.TrcContactId, "Id", false, false).Entity;
+                    contactRoleForObject = IntegrationServiceHelper.FindLookupItem(this.UserConnection, "TrcContactRoleForObject", requestModel.TrcContactRoleForObjectId, "Id", false, false).Entity;
                 }
                 catch (Exception ex)
                 {
-                    res.Result = false;
-                    res.Code = 104002;
-                    res.ReasonPhrase = $"Контакт с id {requestModel.TrcContactId} не найден";
+                    response.Result = false;
+                    response.Code = 104003;
+                    response.ReasonPhrase = $"Роль с id {requestModel.TrcContactRoleForObjectId} не найдена";
                 }
+            }
 
-                if (contact != null)
+            if (contactRoleForObject != null)
+            {
+                try
                 {
-                    try
-                    {
-                        contactRoleForObject = IntegrationServiceHelper.FindLookupItem(this.UserConnection, "TrcContactRoleForObject", requestModel.TrcContactRoleForObjectId, "Id", false, false).Entity;
-                    }
-                    catch (Exception ex)
-                    {
-                        res.Result = false;
-                        res.Code = 104003;
-                        res.ReasonPhrase = $"Роль с id {requestModel.TrcContactRoleForObjectId} не найдена";
-                    }
+                    product = IntegrationServiceHelper.FindLookupItem(this.UserConnection, "Product", requestModel.TrcObjectId, "Id", false, false).Entity;
+
+                    product.SetColumnValue("TrcPersonalAccount", requestModel.TrcPersonalAccount);
+                    product.Save();
                 }
-
-                if (contactRoleForObject != null)
+                catch (Exception ex)
                 {
-                    try
-                    {
-                        product = IntegrationServiceHelper.FindLookupItem(this.UserConnection, "Product", requestModel.TrcObjectId, "Id", false, false).Entity;
-                    }
-                    catch (Exception ex)
-                    {
-                        res.Result = false;
-                        res.Code = 104004;
-                        res.ReasonPhrase = $"Объект с id {requestModel.TrcObjectId} не найден";
-                    }
+                    response.Result = false;
+                    response.Code = 104004;
+                    response.ReasonPhrase = $"Объект с id {requestModel.TrcObjectId} не найден";
                 }
+            }
 
-                if (product != null)
-                {
-                    var connectionObjectWithContact = IntegrationServiceHelper.InsertEntityWithFields(this.UserConnection, "TrcConnectionObjectWithContact", new Dictionary<string, object>()
+            if (product != null)
+            {
+                var connectionObjectWithContact = IntegrationServiceHelper.InsertEntityWithFields(this.UserConnection, "TrcConnectionObjectWithContact", new Dictionary<string, object>()
                     {
                         { "TrcObjectId", requestModel.TrcObjectId },
                         { "TrcContactId", requestModel.TrcContactId },
                         { "TrcCreatedByDomopult", true }
                     });
 
-                    res.TrcConnectionObjectWithContactId = connectionObjectWithContact.PrimaryColumnValue.ToString();
-                }
-            }
-            catch (Exception ex)
-            {
-                res.Code = 500;
-                res.Message = "ERROR";
-                res.Exception = ex.Message;
-                res.StackTrace = ex.StackTrace;
-                res.Result = false;
-            }
-            finally
-            {
-                IntegrationServiceHelper.Log(UserConnection, new IntegrationServiceParams() { Id = TrcIntegrationServices.CreateClientObjectRelation }, requestInitDate, title, uid, res.Exception, request, IntegrationServiceHelper.ToJson(res), res != null ? res.Code : 0);
+                response.TrcConnectionObjectWithContactId = connectionObjectWithContact.PrimaryColumnValue.ToString();
             }
 
-            return res;
+            return response;
         }
 
+        protected override void InitRequiredFields(List<string> requiredFields)
+        {
+            requiredFields.Add("TrcContactId");
+            requiredFields.Add("TrcObjectId");
+            requiredFields.Add("TrcContactRoleForObjectId");
+            requiredFields.Add("TrcPersonalAccount");
+        }
     }
 }

@@ -130,6 +130,7 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Service\BaseClasses\BaseModel.cs" />
     <Compile Include="Service\BaseClasses\BaseOutService.cs" />
+    <Compile Include="Service\BaseClasses\BaseRbiService.cs" />
     <Compile Include="Service\BaseClasses\BaseRequestGenerator.cs" />
     <Compile Include="Service\BaseClasses\BaseResponse.cs" />
     <Compile Include="Service\BaseClasses\BaseResponseHandler.cs" />
