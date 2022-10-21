@@ -24,6 +24,11 @@ namespace RbiIntegration.Service.In.CheckClientExistingService
     [AspNetCompatibilityRequirements(RequirementsMode = AspNetCompatibilityRequirementsMode.Required)]
     public class CheckClientExistingService : BaseRbiService<CheckClientExistingServiceRequestModel, CheckClientExistingServiceResponseModel>
     {
+        protected override Guid GetIntegrationServiceId()
+        {
+            return CrmConstants.TrcIntegrationServices.CheckClientExisting;
+        }
+
         [WebInvoke(Method = "POST", RequestFormat = WebMessageFormat.Json, BodyStyle = WebMessageBodyStyle.Wrapped,
         ResponseFormat = WebMessageFormat.Json)]
         protected override CheckClientExistingServiceResponseModel ProcessBusinessLogic(CheckClientExistingServiceRequestModel requestModel, CheckClientExistingServiceResponseModel response)
@@ -32,7 +37,7 @@ namespace RbiIntegration.Service.In.CheckClientExistingService
             {
                 response.Result = false;
                 response.Code = 304001;
-                response.ReasonPhrase = "В запросе отстутствует основной номер телефона";
+                response.ReasonPhrase = "В запросе отсутствует основной номер телефона";
                 return response;
             }
 

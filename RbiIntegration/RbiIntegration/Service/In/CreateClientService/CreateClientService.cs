@@ -22,6 +22,11 @@ namespace RbiIntegration.Service.In.CreateClientService
     [AspNetCompatibilityRequirements(RequirementsMode = AspNetCompatibilityRequirementsMode.Required)]
     public class CreateClientService : BaseRbiService<CreateClientServiceRequestModel, CreateClientServiceResponseModel>
     {
+        protected override Guid GetIntegrationServiceId()
+        {
+            return CrmConstants.TrcIntegrationServices.CreateClient;
+        }
+
         [WebInvoke(Method = "POST", RequestFormat = WebMessageFormat.Json, BodyStyle = WebMessageBodyStyle.Wrapped,
         ResponseFormat = WebMessageFormat.Json)]
         protected override CreateClientServiceResponseModel ProcessBusinessLogic(CreateClientServiceRequestModel requestModel, CreateClientServiceResponseModel response)

@@ -23,6 +23,11 @@ namespace RbiIntegration.Service.In.RemoveClientObjectRelationService
     [AspNetCompatibilityRequirements(RequirementsMode = AspNetCompatibilityRequirementsMode.Required)]
     public class RemoveClientObjectRelationService : BaseRbiService<RemoveClientObjectRelationServiceRequestModel, RemoveClientObjectRelationServiceResponseModel>
     {
+        protected override Guid GetIntegrationServiceId()
+        {
+            return CrmConstants.TrcIntegrationServices.RemoveClientObjectRelation;
+        }
+
         [WebInvoke(Method = "POST", RequestFormat = WebMessageFormat.Json, BodyStyle = WebMessageBodyStyle.Wrapped,
         ResponseFormat = WebMessageFormat.Json)]
         protected override RemoveClientObjectRelationServiceResponseModel ProcessBusinessLogic(RemoveClientObjectRelationServiceRequestModel requestModel, RemoveClientObjectRelationServiceResponseModel response)
@@ -46,6 +51,7 @@ namespace RbiIntegration.Service.In.RemoveClientObjectRelationService
 
         protected override void InitRequiredFields(List<string> requiredFields)
         {
+            requiredFields.Add("TrcConnectionObjectWithContactId");
         }
     }
 }

@@ -23,6 +23,11 @@ namespace RbiIntegration.Service.In.RemoveClientProfileService
     [AspNetCompatibilityRequirements(RequirementsMode = AspNetCompatibilityRequirementsMode.Required)]
     public class RemoveClientProfileService : BaseRbiService<RemoveClientProfileServiceRequestModel, RemoveClientProfileServiceResponseModel>
     {
+        protected override Guid GetIntegrationServiceId()
+        {
+            return CrmConstants.TrcIntegrationServices.RemoveClientProfile;
+        }
+
         [WebInvoke(Method = "POST", RequestFormat = WebMessageFormat.Json, BodyStyle = WebMessageBodyStyle.Wrapped,
         ResponseFormat = WebMessageFormat.Json)]
         protected override RemoveClientProfileServiceResponseModel ProcessBusinessLogic(RemoveClientProfileServiceRequestModel requestModel, RemoveClientProfileServiceResponseModel response)
@@ -47,7 +52,8 @@ namespace RbiIntegration.Service.In.RemoveClientProfileService
 
         protected override void InitRequiredFields(List<string> requiredFields)
         {
-
+            requiredFields.Add("TrcContactId");
+            requiredFields.Add("TrcDomopultDeletedOn");
         }
     }
 }

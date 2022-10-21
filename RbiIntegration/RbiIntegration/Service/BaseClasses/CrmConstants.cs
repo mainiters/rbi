@@ -31,6 +31,21 @@ namespace RbiIntegration.Service.BaseClasses
             /// </summary>
             public static Guid CreateClientObjectRelation = new Guid("8838827D-1D5C-4A4D-B457-CC497AD40C3B");
 
+            /// <summary>
+            /// Сервис удаления профиля клиента
+            /// </summary>
+            public static Guid RemoveClientProfile = new Guid("738959BB-ED63-41E3-931D-704FDE3CFC41");
+
+            /// <summary>
+            /// Сервис удаления связи клиента с помещением
+            /// </summary>
+            public static Guid RemoveClientObjectRelation = new Guid("C365D1B4-1BBB-403E-8058-1A0903069EF8");
+
+            /// <summary>
+            /// Сервис добавления помещения клиенту
+            /// </summary>
+            public static Guid AddClientObject = new Guid("D51CA012-7F95-43C7-8971-40C29CF4D38C");
+
         }
     }
 }
