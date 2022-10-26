@@ -18,7 +18,7 @@ namespace RbiIntegration.Service.In.CreateClientService.Model.Request
         /// Id Клиента в Домопульт
         /// </summary>
         [DataMember]
-        public int TrcDomopultID { get; set; }
+        public string TrcDomopultID { get; set; }
 
         /// <summary>
         /// ФИО

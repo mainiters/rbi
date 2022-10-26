@@ -31,6 +31,20 @@ namespace RbiIntegration.Service.In.CreateClientService
         ResponseFormat = WebMessageFormat.Json)]
         protected override CreateClientServiceResponseModel ProcessBusinessLogic(CreateClientServiceRequestModel requestModel, CreateClientServiceResponseModel response)
         {
+            var communicationsDict = new Dictionary<string, object>();
+
+            if (requestModel.Phones != null && requestModel.Phones.Length > 0 && requestModel.Phones.Count(e => e.Basic == true) > 0)
+            {
+                communicationsDict.Add("MobilePhone", IntegrationServiceHelper.MaskPhone(requestModel.Phones.First(e => e.Basic == true).Phone));
+            }
+            else
+            {
+                response.Result = false;
+                response.Code = 304001;
+                response.ReasonPhrase = "В запросе отсутствует основной номер телефона";
+                return response;
+            }
+
             var values = new Dictionary<string, object>()
             {
                 { "Name", requestModel.Name },
@@ -43,13 +57,6 @@ namespace RbiIntegration.Service.In.CreateClientService
             response.TrcContactId = contact.PrimaryColumnValue.ToString();
 
             ProcessCommunications(requestModel, contact.PrimaryColumnValue);
-
-            var communicationsDict = new Dictionary<string, object>();
-
-            if (requestModel.Phones != null && requestModel.Phones.Length > 0 && requestModel.Phones.Count(e => e.Basic == true) > 0)
-            {
-                communicationsDict.Add("MobilePhone", IntegrationServiceHelper.MaskPhone(requestModel.Phones.First(e => e.Basic == true).Phone));
-            }
 
             if (requestModel.Emails != null && requestModel.Emails.Length > 0 && requestModel.Emails.Count(e => e.Basic) > 0)
             {

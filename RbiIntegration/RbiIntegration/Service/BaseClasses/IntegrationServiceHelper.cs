@@ -25,6 +25,8 @@ namespace RbiIntegration.Service.BaseClasses
         /// <returns></returns>
         public static string MaskPhone(string phone)
         {
+            phone = CleanStringOfNonDigits(phone);
+
             if (phone.Length >= 10)
             {
                 var lastDigits = phone.Substring(phone.Length - 10);

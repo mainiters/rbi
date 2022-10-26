@@ -32,16 +32,14 @@ namespace RbiIntegration.Service.In.RemoveClientObjectRelationService
         ResponseFormat = WebMessageFormat.Json)]
         protected override RemoveClientObjectRelationServiceResponseModel ProcessBusinessLogic(RemoveClientObjectRelationServiceRequestModel requestModel, RemoveClientObjectRelationServiceResponseModel response)
         {
-            var delete = new Delete(this.UserConnection)
-                            .From("TrcConnectionObjectWithContact")
-                            .Where("Id").IsEqual(Column.Parameter(requestModel.TrcConnectionObjectWithContactId));
-
-            var removedCount = delete.Execute();
-
-            response.Result = removedCount > 0;
-
-            if (!response.Result)
+            try
             {
+                var entity = IntegrationServiceHelper.GetEntityByField(this.UserConnection, "TrcConnectionObjectWithContact", "Id", requestModel.TrcConnectionObjectWithContactId);
+                response.Result = entity.Delete();
+            }
+            catch (Exception ex)
+            {
+                response.Result = false;
                 response.Code = 104006;
                 response.ReasonPhrase = $"Связь с id {requestModel.TrcConnectionObjectWithContactId} не найдена";
             }

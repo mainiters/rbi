@@ -82,6 +82,7 @@ namespace RbiIntegration.Service.In.CreateClientObjectRelationService
                     {
                         { "TrcObjectId", requestModel.TrcObjectId },
                         { "TrcContactId", requestModel.TrcContactId },
+                        { "TrcContactRoleForObjectId", requestModel.TrcContactRoleForObjectId },
                         { "TrcCreatedByDomopult", true }
                     });
 

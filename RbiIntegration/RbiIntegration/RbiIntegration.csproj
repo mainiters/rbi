@@ -151,7 +151,7 @@
     <Compile Include="Service\In\CheckClientExistingService\Model\Response\CheckClientExistingServiceResponseModel.cs" />
     <Compile Include="Service\In\RemoveClientProfileService\Model\Request\RemoveClientProfileServiceRequestModel.cs" />
     <Compile Include="Service\In\RemoveClientProfileService\Model\Response\RemoveClientProfileServiceResponseModel.cs" />
-    <Compile Include="Service\In\RemoveClientProfileService\RemoveClientObjectRelationService.cs" />
+    <Compile Include="Service\In\RemoveClientProfileService\RemoveClientProfileService.cs" />
     <Compile Include="Service\In\RemoveClientObjectRelationService\RemoveClientObjectRelationService.cs" />
     <Compile Include="Service\In\RemoveClientObjectRelationService\Model\Request\RemoveClientObjectRelationServiceRequestModel.cs" />
     <Compile Include="Service\In\RemoveClientObjectRelationService\Model\Response\RemoveClientObjectRelationServiceResponseModel.cs" />
