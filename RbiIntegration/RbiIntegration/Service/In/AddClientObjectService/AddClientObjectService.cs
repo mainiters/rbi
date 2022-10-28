@@ -33,23 +33,27 @@ namespace RbiIntegration.Service.In.AddClientObjectService
         ResponseFormat = WebMessageFormat.Json)]
         protected override AddClientObjectServiceResponseModel ProcessBusinessLogic(AddClientObjectServiceRequestModel requestModel, AddClientObjectServiceResponseModel response)
         {
-            Entity contact = null;
+            Guid? contactId = null;
             Entity contactRoleForObject = null;
             Entity product = null;
 
             try
             {
-                contact = IntegrationServiceHelper.GetEntityByField(this.UserConnection, "Contact", "Id", requestModel.TrcContactId);
+                var contact = IntegrationServiceHelper.GetEntityByField(this.UserConnection, "Contact", "Id", requestModel.TrcContactId);
+                contactId = contact.PrimaryColumnValue;
             }
             catch
             {
             }
 
-            if (contact == null)
+            if (contactId == null)
             {
                 if (requestModel.Phones == null || requestModel.Phones.Length < 1 || requestModel.Phones.Count(e => e.Basic == true) < 1)
                 {
-                    throw new Exception("В запросе отсутствует основной номер телефона");
+                    response.Result = false;
+                    response.Code = 304001;
+                    response.ReasonPhrase = "В запросе отсутствует основной номер телефона";
+                    return response;
                 }
 
                 var phone = requestModel.Phones.First(e => e.Basic == true).Phone;
@@ -67,8 +71,8 @@ namespace RbiIntegration.Service.In.AddClientObjectService
                 if (entities.Count < 1)
                 {
                     response.Result = false;
-                    response.Code = 104001;
-                    response.ReasonPhrase = $"Контакт с номером {phone} не найден";
+                    response.Code = 104005;
+                    response.ReasonPhrase = $"Контакт ни с id {requestModel.TrcContactId}, ни с номером {phone} не найден";
                 }
                 else if (entities.Count > 1)
                 {
@@ -78,11 +82,11 @@ namespace RbiIntegration.Service.In.AddClientObjectService
                 }
                 else
                 {
-                    contact = entities.First();
+                    contactId = entities.First().GetTypedColumnValue<Guid>("ContactId");
                 }
             }
 
-            if (contact != null)
+            if (contactId != null)
             {
                 try
                 {
@@ -117,8 +121,9 @@ namespace RbiIntegration.Service.In.AddClientObjectService
             {
                 var connectionObjectWithContact = IntegrationServiceHelper.InsertEntityWithFields(this.UserConnection, "TrcConnectionObjectWithContact", new Dictionary<string, object>()
                     {
-                        { "TrcObjectId", requestModel.ProductId },
-                        { "TrcContactId", requestModel.TrcContactId },
+                        { "TrcObjectId", product.PrimaryColumnValue },
+                        { "TrcContactId", contactId },
+                        { "TrcContactRoleForObjectId", contactRoleForObject.PrimaryColumnValue },
                         { "TrcCreatedByDomopult", true }
                     });
 

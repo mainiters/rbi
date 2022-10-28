@@ -149,6 +149,15 @@
     <Compile Include="Service\In\CheckClientExistingService\Model\Request\CheckClientExistingServiceRequestModel.cs" />
     <Compile Include="Service\In\CheckClientExistingService\Model\Request\Phone.cs" />
     <Compile Include="Service\In\CheckClientExistingService\Model\Response\CheckClientExistingServiceResponseModel.cs" />
+    <Compile Include="Service\In\AddApplicationRatingService\AddApplicationRatingService.cs" />
+    <Compile Include="Service\In\AddApplicationRatingService\Model\Request\AddApplicationRatingServiceRequestModel.cs" />
+    <Compile Include="Service\In\AddApplicationRatingService\Model\Response\AddApplicationRatingServiceResponseModel.cs" />
+    <Compile Include="Service\In\UpdateApplicationService\UpdateApplicationService.cs" />
+    <Compile Include="Service\In\UpdateApplicationService\Model\Request\UpdateApplicationServiceRequestModel.cs" />
+    <Compile Include="Service\In\UpdateApplicationService\Model\Response\UpdateApplicationServiceResponseModel.cs" />
+    <Compile Include="Service\In\CreateApplicationService\CreateApplicationService.cs" />
+    <Compile Include="Service\In\CreateApplicationService\Model\Request\CreateApplicationServiceRequestModel.cs" />
+    <Compile Include="Service\In\CreateApplicationService\Model\Response\CreateApplicationServiceResponseModel.cs" />
     <Compile Include="Service\In\RemoveClientProfileService\Model\Request\RemoveClientProfileServiceRequestModel.cs" />
     <Compile Include="Service\In\RemoveClientProfileService\Model\Response\RemoveClientProfileServiceResponseModel.cs" />
     <Compile Include="Service\In\RemoveClientProfileService\RemoveClientProfileService.cs" />

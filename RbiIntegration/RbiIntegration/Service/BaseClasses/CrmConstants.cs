@@ -46,6 +46,21 @@ namespace RbiIntegration.Service.BaseClasses
             /// </summary>
             public static Guid AddClientObject = new Guid("D51CA012-7F95-43C7-8971-40C29CF4D38C");
 
+            /// <summary>
+            /// Сервис создания заявки
+            /// </summary>
+            public static Guid CreateApplication = new Guid("65176FF1-C66B-47B4-8E2B-449DD93A2414");
+
+            /// <summary>
+            /// Сервис обновления заявки
+            /// </summary>
+            public static Guid UpdateApplication = new Guid("3F54F434-93AC-4739-A453-2F8E0AA5D8B1");
+
+            /// <summary>
+            /// Добавление оценки для заявки
+            /// </summary>
+            public static Guid AddApplicationRating = new Guid("2DDAE9E1-50F8-4EAE-887D-0200DF13B755");
+            
         }
     }
 }
