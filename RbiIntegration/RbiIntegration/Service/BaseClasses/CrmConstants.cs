@@ -60,7 +60,12 @@ namespace RbiIntegration.Service.BaseClasses
             /// Добавление оценки для заявки
             /// </summary>
             public static Guid AddApplicationRating = new Guid("2DDAE9E1-50F8-4EAE-887D-0200DF13B755");
-            
+
+            /// <summary>
+            /// Добавление файлов
+            /// </summary>
+            public static Guid AddFile = new Guid("315D0251-4C55-4B9F-BAC8-2232DFFBCB35");
+
         }
     }
 }

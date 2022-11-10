@@ -141,6 +141,10 @@
     <Compile Include="Service\BaseClasses\IntegrationServiceHelper.cs" />
     <Compile Include="Service\BaseClasses\IntegrationServiceParams.cs" />
     <Compile Include="Service\BaseClasses\ServiceWrapper.cs" />
+    <Compile Include="Service\In\AddFileService\AddFileService.cs" />
+    <Compile Include="Service\In\AddFileService\Model\Request\AddFileServiceRequestModel.cs" />
+    <Compile Include="Service\In\AddFileService\Model\Request\File.cs" />
+    <Compile Include="Service\In\AddFileService\Model\Response\AddFileServiceResponseModel.cs" />
     <Compile Include="Service\In\AddClientObjectService\AddClientObjectService.cs" />
     <Compile Include="Service\In\AddClientObjectService\Model\Request\AddClientObjectServiceRequestModel.cs" />
     <Compile Include="Service\In\AddClientObjectService\Model\Request\Phone.cs" />

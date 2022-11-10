@@ -45,7 +45,7 @@ namespace RbiIntegration.Service.In.AddApplicationRatingService
                 return response;
             }
 
-            var rating = IntegrationServiceHelper.InsertEntityWithFields(this.UserConnection, "TrcRequest", new Dictionary<string, object>()
+            var rating = IntegrationServiceHelper.InsertEntityWithFields(this.UserConnection, "TrcRequestRating", new Dictionary<string, object>()
             {
                 { "TrcRequestId", request.PrimaryColumnValue },
                 { "TrcRating", requestModel.TrcRating },

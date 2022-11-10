@@ -56,7 +56,7 @@ namespace RbiIntegration.Service.In.CreateApplicationService
             {
                 response.Result = false;
                 response.Code = 104002;
-                response.ReasonPhrase = $"Контакт с id {requestModel.TrcServiceId} не найден";
+                response.ReasonPhrase = $"Контакт с id {requestModel.TrcContactId} не найден";
                 return response;
             }
 
@@ -93,8 +93,8 @@ namespace RbiIntegration.Service.In.CreateApplicationService
                 { "TrcDomopultApplicationId", requestModel.TrcApplicationDomopultId },
                 { "TrcName", requestModel.TrcName },
                 { "TrcDescription", requestModel.TrcDescription },
-                { "TrcRequestTypeId", "c43e49af-89b4-4754-ab9c-172b04faae1b" },
-                { "TrcRequestSourceId", "403e346b-080c-4c54-8c13-e66493d1607d" },
+                { "TrcRequestTypeId", Guid.Parse("c43e49af-89b4-4754-ab9c-172b04faae1b") },
+                { "TrcRequestSourceId", Guid.Parse("403e346b-080c-4c54-8c13-e66493d1607d") },
                 { "TrcDomopultCreatedOn", DateTime.Parse(requestModel.TrcDomopultCreatedOn) }
             });
 
