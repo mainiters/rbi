@@ -176,6 +176,16 @@
     <Compile Include="Service\In\CreateClientService\Model\Request\EmailData.cs" />
     <Compile Include="Service\In\CreateClientService\Model\Request\Phone.cs" />
     <Compile Include="Service\In\CreateClientService\Model\Response\CreateClientServiceResponseModel.cs" />
+    <Compile Include="Service\Profitbase\ChangeRequestStatus\ChangeRequestStatusService.cs" />
+    <Compile Include="Service\Profitbase\ChangeRequestStatus\Model\Request\ChangeRequestStatusServiceRequestModel.cs" />
+    <Compile Include="Service\Profitbase\ChangeRequestStatus\Model\Request\payload.cs" />
+    <Compile Include="Service\Profitbase\ChangeRequestStatus\Model\Response\ChangeRequestStatusServiceResponseModel.cs" />
+    <Compile Include="Service\Profitbase\CreateRequest\CreateRequestService.cs" />
+    <Compile Include="Service\Profitbase\CreateRequest\Model\Request\CreateRequestServiceRequestModel.cs" />
+    <Compile Include="Service\Profitbase\CreateRequest\Model\Request\linkingDocument.cs" />
+    <Compile Include="Service\Profitbase\CreateRequest\Model\Request\payload.cs" />
+    <Compile Include="Service\Profitbase\CreateRequest\Model\Request\user.cs" />
+    <Compile Include="Service\Profitbase\CreateRequest\Model\Response\CreateRequestServiceResponseModel.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />

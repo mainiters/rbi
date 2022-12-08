@@ -35,7 +35,12 @@ namespace RbiIntegration.Service.In.RemoveClientObjectRelationService
             try
             {
                 var entity = IntegrationServiceHelper.GetEntityByField(this.UserConnection, "TrcConnectionObjectWithContact", "Id", requestModel.TrcConnectionObjectWithContactId);
-                response.Result = entity.Delete();
+                //response.Result = entity.Delete();
+
+                entity.SetColumnValue("TrcDeletedOn", DateTime.Now);
+                entity.SetColumnValue("TrcContactRoleForObjectId", Guid.Parse("2891f0a4-e6d5-4249-9f2f-a0c7da786826"));
+
+                entity.Save(false);
             }
             catch (Exception ex)
             {

@@ -40,7 +40,7 @@ namespace RbiIntegration.Service.In.AddFileService
             catch (Exception ex)
             {
                 response.Result = false;
-                response.Code = 304401;
+                response.Code = 304041;
                 response.ReasonPhrase = $"Заявка с id {requestModel.TrcRequestId} не найдена";
                 return response;
             }
@@ -51,8 +51,8 @@ namespace RbiIntegration.Service.In.AddFileService
                 {
                     { "TrcRequestId", request.PrimaryColumnValue },
                     { "TypeId", Guid.Parse("539BC2F8-0EE0-DF11-971B-001D60E938C6") },
-                    { "Name", item.FileName },
-                    { "Notes", item.Link }
+                    { "Name", item.Link },
+                    { "Notes", item.FileName }
                 });
             }
 
