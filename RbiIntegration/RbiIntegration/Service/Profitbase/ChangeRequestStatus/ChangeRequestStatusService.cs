@@ -13,7 +13,7 @@ using Terrasoft.Core.Entities;
 using Terrasoft.Web.Common;
 using static RbiIntegration.Service.BaseClasses.CrmConstants;
 
-namespace RbiIntegration.Service.In.Profitbase.CreateRequest
+namespace RbiIntegration.Service.In.Profitbase.ChangeRequestStatus
 {
     /// <summary>
     /// Сервис изменения статуса заявки
@@ -24,7 +24,7 @@ namespace RbiIntegration.Service.In.Profitbase.CreateRequest
     {
         protected override Guid GetIntegrationServiceId()
         {
-            return CrmConstants.TrcIntegrationServices.AddApplicationRating;
+            return CrmConstants.TrcIntegrationServices.ChangeRequestStatus;
         }
 
         [WebInvoke(Method = "POST", RequestFormat = WebMessageFormat.Json, BodyStyle = WebMessageBodyStyle.Wrapped,

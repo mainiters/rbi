@@ -66,6 +66,16 @@ namespace RbiIntegration.Service.BaseClasses
             /// </summary>
             public static Guid AddFile = new Guid("315D0251-4C55-4B9F-BAC8-2232DFFBCB35");
 
+            /// <summary>
+            /// Сервис создания заявки
+            /// </summary>
+            public static Guid CreateRequest = new Guid("00586EA7-D714-40EB-AF4F-A82FFB8090FC");
+
+            /// <summary>
+            /// Сервис изменения статуса заявки
+            /// </summary>
+            public static Guid ChangeRequestStatus = new Guid("E88E55E7-DB97-4C4F-8A2C-95A78ECD9E30");
+
         }
     }
 }

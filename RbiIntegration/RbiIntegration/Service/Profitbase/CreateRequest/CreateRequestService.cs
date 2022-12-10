@@ -20,11 +20,11 @@ namespace RbiIntegration.Service.In.Profitbase.CreateRequest
     /// </summary>
     [ServiceContract]
     [AspNetCompatibilityRequirements(RequirementsMode = AspNetCompatibilityRequirementsMode.Required)]
-    public class CreateRequestServiceService : BaseRbiService<CreateRequestServiceRequestModel, CreateRequestServiceResponseModel>
+    public class CreateRequestService : BaseRbiService<CreateRequestServiceRequestModel, CreateRequestServiceResponseModel>
     {
         protected override Guid GetIntegrationServiceId()
         {
-            return CrmConstants.TrcIntegrationServices.AddApplicationRating;
+            return CrmConstants.TrcIntegrationServices.CreateRequest;
         }
 
         [WebInvoke(Method = "POST", RequestFormat = WebMessageFormat.Json, BodyStyle = WebMessageBodyStyle.Wrapped,
@@ -62,45 +62,45 @@ namespace RbiIntegration.Service.In.Profitbase.CreateRequest
                     {
                         UpdateContactTrcPersonalAccount(contact);
                     }
-                    else
+                }
+                else
+                {
+                    contact = IntegrationServiceHelper.InsertEntityWithFields(this.UserConnection, "Contact", new Dictionary<string, object>()
                     {
-                        contact = IntegrationServiceHelper.InsertEntityWithFields(this.UserConnection, "Contact", new Dictionary<string, object>()
-                        {
-                            { "Name", $"{requestModel.payload.user.name} {requestModel.payload.user.surname} {requestModel.payload.user.patronymic}" },
-                            { "GivenName", requestModel.payload.user.name },
-                            { "TrcProfitbaseLKId", requestModel.payload.user.userId },
-                            { "MobilePhone", requestModel.payload.user.phonenumber },
-                            { "Email", requestModel.payload.user.email },
-                            { "TrcPersonalAccount", true }
-                        });
-                    }
-
-                    // Ищем заявку
-                    try
-                    {
-                        request = IntegrationServiceHelper.GetEntityByField(this.UserConnection, "TrcRequest", "TrcRequestIdLK", requestModel.payload.documentId);
-
-                        // Заявка существует - возвращаем ошибку
-                        response.Result = false;
-                        response.ReasonPhrase = requestModel.payload.documentId;
-                    }
-                    catch (Exception)
-                    {
-                        // Заявки нет - все хорошо, создаем
-                        request = IntegrationServiceHelper.InsertEntityWithFields(this.UserConnection, "TrcRequest", new Dictionary<string, object>()
-                        {
-                            { "TrcRequestType", Guid.Parse("512f0d01-99c1-4c1b-8ad2-9dcd4c56abc6") },
-                            { "TrcContact", contact.PrimaryColumnValue },
-                            { "TrcRequestIdLK", requestModel.payload.documentId },
-                            { "TrcRequestSource", Guid.Parse("(b24e3d01-87be-4164-ae8e-559c6769d3c8") }
-                        });
-
-                        response.Id = request.PrimaryColumnValue.ToString();
-
-                        // Вызов GET запроса
-                    }
+                        { "Name", $"{requestModel.payload.user.name} {requestModel.payload.user.surname} {requestModel.payload.user.patronymic}" },
+                        { "GivenName", requestModel.payload.user.name },
+                        { "TrcProfitbaseLKId", requestModel.payload.user.userId },
+                        { "MobilePhone", requestModel.payload.user.phonenumber },
+                        { "Email", requestModel.payload.user.email },
+                        { "TrcPersonalAccount", true }
+                    });
                 }
             }
+
+            // Ищем заявку
+            try
+            {
+                request = IntegrationServiceHelper.GetEntityByField(this.UserConnection, "TrcRequest", "TrcRequestIdLK", requestModel.payload.documentId);
+
+                // Заявка существует - возвращаем ошибку
+                response.Result = false;
+                response.ReasonPhrase = requestModel.payload.documentId;
+            }
+            catch (Exception)
+            {
+                // Заявки нет - все хорошо, создаем
+                request = IntegrationServiceHelper.InsertEntityWithFields(this.UserConnection, "TrcRequest", new Dictionary<string, object>()
+                        {
+                            { "TrcRequestTypeId", Guid.Parse("512f0d01-99c1-4c1b-8ad2-9dcd4c56abc6") },
+                            { "TrcContactId", contact.PrimaryColumnValue },
+                            { "TrcRequestIdLK", requestModel.payload.documentId },
+                            { "TrcRequestSourceId", Guid.Parse("b24e3d01-87be-4164-ae8e-559c6769d3c8") }
+                        });
+
+                response.Id = request.PrimaryColumnValue.ToString();
+            }
+
+            // Вызов GET запроса
 
             return response;
         }
