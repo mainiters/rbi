@@ -65,9 +65,16 @@ namespace RbiIntegration.Service.In.Profitbase.CreateRequest
                 }
                 else
                 {
+                    var fioArr = new string[]
+                    {
+                        requestModel.payload.user.surname,
+                        requestModel.payload.user.name,
+                        requestModel.payload.user.patronymic
+                    };
+          
                     contact = IntegrationServiceHelper.InsertEntityWithFields(this.UserConnection, "Contact", new Dictionary<string, object>()
                     {
-                        { "Name", $"{requestModel.payload.user.name} {requestModel.payload.user.surname} {requestModel.payload.user.patronymic}" },
+                        { "Name", string.Join(" ", fioArr) },
                         { "GivenName", requestModel.payload.user.name },
                         { "TrcProfitbaseLKId", requestModel.payload.user.userId },
                         { "MobilePhone", requestModel.payload.user.phonenumber },
@@ -84,7 +91,8 @@ namespace RbiIntegration.Service.In.Profitbase.CreateRequest
 
                 // Заявка существует - возвращаем ошибку
                 response.Result = false;
-                response.ReasonPhrase = requestModel.payload.documentId;
+                response.Code = 500;
+                response.ReasonPhrase = $"Заявка с идентификатором {requestModel.payload.documentId} уже существует";
             }
             catch (Exception)
             {
@@ -100,7 +108,8 @@ namespace RbiIntegration.Service.In.Profitbase.CreateRequest
                 response.Id = request.PrimaryColumnValue.ToString();
             }
 
-            // Вызов GET запроса
+            var wrapper = new ServiceWrapper(this.UserConnection, "EnrichmentService");
+            wrapper.SendRequest(request.PrimaryColumnValue);
 
             return response;
         }
@@ -130,6 +139,7 @@ namespace RbiIntegration.Service.In.Profitbase.CreateRequest
                 {
                     response.ReasonPhrase = "Не заполнено обязательное поле payload.documentId";
                     response.Result = false;
+                    response.Code = 500;
                     return;
                 }
 
@@ -137,6 +147,7 @@ namespace RbiIntegration.Service.In.Profitbase.CreateRequest
                 {
                     response.ReasonPhrase = "Не заполнено обязательное поле payload.workflowType";
                     response.Result = false;
+                    response.Code = 500;
                     return;
                 }
 
@@ -144,6 +155,7 @@ namespace RbiIntegration.Service.In.Profitbase.CreateRequest
                 {
                     response.ReasonPhrase = "Не заполнено обязательное поле payload.user";
                     response.Result = false;
+                    response.Code = 500;
                     return;
                 }
 
@@ -151,6 +163,7 @@ namespace RbiIntegration.Service.In.Profitbase.CreateRequest
                 {
                     response.ReasonPhrase = "Не заполнено обязательное поле payload.user.email";
                     response.Result = false;
+                    response.Code = 500;
                     return;
                 }
 
@@ -158,6 +171,7 @@ namespace RbiIntegration.Service.In.Profitbase.CreateRequest
                 {
                     response.ReasonPhrase = "Не заполнено обязательное поле payload.user.name";
                     response.Result = false;
+                    response.Code = 500;
                     return;
                 }
 
@@ -165,6 +179,7 @@ namespace RbiIntegration.Service.In.Profitbase.CreateRequest
                 {
                     response.ReasonPhrase = "Не заполнено обязательное поле payload.user.phonenumber";
                     response.Result = false;
+                    response.Code = 500;
                     return;
                 }
 
@@ -179,6 +194,7 @@ namespace RbiIntegration.Service.In.Profitbase.CreateRequest
                 {
                     response.ReasonPhrase = "Не заполнено обязательное поле payload.user.userId";
                     response.Result = false;
+                    response.Code = 500;
                     return;
                 }
 
@@ -188,6 +204,7 @@ namespace RbiIntegration.Service.In.Profitbase.CreateRequest
                     {
                         response.ReasonPhrase = "Не заполнено обязательное поле payload.linkingDocument.documentId";
                         response.Result = false;
+                        response.Code = 500;
                         return;
                     }
 
@@ -195,6 +212,7 @@ namespace RbiIntegration.Service.In.Profitbase.CreateRequest
                     {
                         response.ReasonPhrase = "Не заполнено обязательное поле payload.linkingDocument.workflowType";
                         response.Result = false;
+                        response.Code = 500;
                         return;
                     }
                 }

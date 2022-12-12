@@ -33,14 +33,20 @@ namespace RbiIntegration.Service.In.Profitbase.ChangeRequestStatus
         {
             try
             {
+                var request = IntegrationServiceHelper.GetEntityByField(this.UserConnection, "TrcRequest", "TrcRequestIdLK", requestModel.payload.documentId);
+
                 if (requestModel.payload.previousStatus == "needAgr" && requestModel.payload.nextStatus == "sendServ")
                 {
-                    // Вызов GET запроса
+                    var wrapper = new ServiceWrapper(this.UserConnection, "EnrichmentService");
+                    wrapper.SendRequest(request.PrimaryColumnValue);
                 }
             }
             catch (Exception ex)
             {
-                
+                // Заявка не существует - возвращаем ошибку
+                response.Code = 500;
+                response.Result = false;
+                response.ReasonPhrase = $"Заявка с id {requestModel.payload.documentId} не найдена";
             }
 
             return response;
@@ -62,6 +68,7 @@ namespace RbiIntegration.Service.In.Profitbase.ChangeRequestStatus
                 {
                     response.ReasonPhrase = "Не заполнено обязательное поле payload.documentId";
                     response.Result = false;
+                    response.Code = 500;
                     return;
                 }
 
@@ -69,6 +76,7 @@ namespace RbiIntegration.Service.In.Profitbase.ChangeRequestStatus
                 {
                     response.ReasonPhrase = "Не заполнено обязательное поле payload.workflowType";
                     response.Result = false;
+                    response.Code = 500;
                     return;
                 }
 
@@ -76,6 +84,7 @@ namespace RbiIntegration.Service.In.Profitbase.ChangeRequestStatus
                 {
                     response.ReasonPhrase = "Не заполнено обязательное поле payload.nextStatus";
                     response.Result = false;
+                    response.Code = 500;
                     return;
                 }
 
@@ -83,6 +92,7 @@ namespace RbiIntegration.Service.In.Profitbase.ChangeRequestStatus
                 {
                     response.ReasonPhrase = "Не заполнено обязательное поле payload.previousStatus";
                     response.Result = false;
+                    response.Code = 500;
                     return;
                 }
             }

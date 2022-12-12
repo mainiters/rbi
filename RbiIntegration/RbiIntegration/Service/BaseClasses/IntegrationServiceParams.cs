@@ -45,5 +45,10 @@ namespace RbiIntegration.Service.BaseClasses
         /// Токен
         /// </summary>
         public string Token { get; set; }
+
+        /// <summary>
+        /// Тип запроса
+        /// </summary>
+        public string RequestType { get; set; }
     }
 }

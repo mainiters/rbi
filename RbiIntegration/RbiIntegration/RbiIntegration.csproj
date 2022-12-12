@@ -186,6 +186,19 @@
     <Compile Include="Service\Profitbase\CreateRequest\Model\Request\payload.cs" />
     <Compile Include="Service\Profitbase\CreateRequest\Model\Request\user.cs" />
     <Compile Include="Service\Profitbase\CreateRequest\Model\Response\CreateRequestServiceResponseModel.cs" />
+    <Compile Include="Service\Profitbase\Enrichment\EnrichmentService.cs" />
+    <Compile Include="Service\Profitbase\Enrichment\Generator\EnrichmentServiceRequestGenerator.cs" />
+    <Compile Include="Service\Profitbase\Enrichment\Handler\EnrichmentServiceResponseHandler.cs" />
+    <Compile Include="Service\Profitbase\Enrichment\Model\Request\EnrichmentServiceRequestModel.cs" />
+    <Compile Include="Service\Profitbase\Enrichment\Model\Response\adrReg.cs" />
+    <Compile Include="Service\Profitbase\Enrichment\Model\Response\bankDetails.cs" />
+    <Compile Include="Service\Profitbase\Enrichment\Model\Response\doc.cs" />
+    <Compile Include="Service\Profitbase\Enrichment\Model\Response\EnrichmentServiceResponseModel.cs" />
+    <Compile Include="Service\Profitbase\Enrichment\Model\Response\freeForm.cs" />
+    <Compile Include="Service\Profitbase\Enrichment\Model\Response\infoApproval.cs" />
+    <Compile Include="Service\Profitbase\Enrichment\Model\Response\infoRevision.cs" />
+    <Compile Include="Service\Profitbase\Enrichment\Model\Response\passDetails.cs" />
+    <Compile Include="Service\Profitbase\Enrichment\Model\Response\sex.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />

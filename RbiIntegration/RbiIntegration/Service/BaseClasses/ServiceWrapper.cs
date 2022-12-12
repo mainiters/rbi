@@ -1,4 +1,6 @@
-﻿using System;
+﻿using RbiIntegration.Service.In.Profitbase.Enrichment;
+using RbiIntegration.Service.In.Profitbase.EnrichmentService;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -47,8 +49,6 @@ namespace RbiIntegration.Service.BaseClasses
         /// <summary>
         /// Метод отправки запроса в сервис
         /// </summary>
-        /// <param name="requestStr">Выходной параметр, хранящий текст запроса</param>
-        /// <param name="responseStr">Выходной параметр, хранящий текст ответа от сервиса</param>
         /// <param name="id">Идентификатор сущности для формирования запроса</param>
         public BaseResponse SendRequest(params Guid[] id)
         {
@@ -86,7 +86,9 @@ namespace RbiIntegration.Service.BaseClasses
         protected BaseOutService GetServiceByServiceParams(IntegrationServiceParams serviceParams)
         {
             switch (serviceParams.ServiceName)
-            { 
+            {
+                case "Enrichment":
+                    return new EnrichmentService(this._userConnection, serviceParams);
                 default:
                     throw new Exception($"Неизвестный код сервиса {serviceParams.ServiceName}");
             }
