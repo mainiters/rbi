@@ -1,6 +1,5 @@
-﻿using RbiIntegration.Service.In.Profitbase.AuthToken;
-using RbiIntegration.Service.In.Profitbase.Enrichment;
-using RbiIntegration.Service.In.Profitbase.EnrichmentService;
+﻿using RbiIntegration.Service.Profitbase.Out.AuthToken;
+using RbiIntegration.Service.Profitbase.Out.EnrichmentService;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -51,7 +50,7 @@ namespace RbiIntegration.Service.BaseClasses
         /// Метод отправки запроса в сервис
         /// </summary>
         /// <param name="id">Идентификатор сущности для формирования запроса</param>
-        public BaseResponse SendRequest(params Guid[] id)
+        public BaseResponse SendRequest(params string[] id)
         {
             ServicePointManager.SecurityProtocol = SecurityProtocolType.Ssl3 | SecurityProtocolType.Tls | SecurityProtocolType.Tls12 | SecurityProtocolType.Tls11;
 

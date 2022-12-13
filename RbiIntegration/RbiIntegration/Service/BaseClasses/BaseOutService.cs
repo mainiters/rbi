@@ -24,7 +24,7 @@ namespace RbiIntegration.Service.BaseClasses
             this._userConnection = userConnection;
         }
 
-        public virtual BaseResponse CallService(params Guid[] id)
+        public virtual BaseResponse CallService(params string[] id)
         {
             var generator = GetRequestGenerator();
             var handler = GetResponseHandler();
@@ -38,7 +38,7 @@ namespace RbiIntegration.Service.BaseClasses
         /// Получить генератор запроса
         /// </summary>
         /// <returns></returns>
-        protected virtual BaseRequestGenerator GetRequestGenerator(params Guid[] id)
+        protected virtual BaseRequestGenerator GetRequestGenerator(params string[] id)
         {
             return new BaseRequestGenerator(this._userConnection, this._serviceParams);
         }

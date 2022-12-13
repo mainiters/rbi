@@ -38,7 +38,7 @@ namespace RbiIntegration.Service.BaseClasses
         /// </summary>
         /// <param name="response">Ответ сервиса</param>
         /// <param name="id">Идентификаторы записей базовой сущности</param>
-        public virtual void Handle(BaseResponse response, params Guid[] id)
+        public virtual void Handle(BaseResponse response, params string[] id)
         {
 
         }

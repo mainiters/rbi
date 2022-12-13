@@ -55,7 +55,7 @@ namespace RbiIntegration.Service.BaseClasses
         /// </summary>
         /// <param name="id">Идентификаторы базовой сущности для вычитки данных модели</param>
         /// <returns>Модель запроса</returns>
-        public virtual BaseModel GenerateModel(params Guid[] id)
+        public virtual BaseModel GenerateModel(params string[] id)
         {
             return new BaseModel();
         }
@@ -64,7 +64,7 @@ namespace RbiIntegration.Service.BaseClasses
         /// Получение данных из БД по идентификаторам базовых сущностей
         /// </summary>
         /// <returns>Данные сущностей</returns>
-        protected virtual Dictionary<Guid, Entity> ReadEntityData(params Guid[] id)
+        protected virtual Dictionary<string, Entity> ReadEntityData(params string[] id)
         {
             EntitySchema schema = this._userConnection.EntitySchemaManager.GetInstanceByName(this._serviceParams.EntitySchemaName);
 
@@ -83,7 +83,7 @@ namespace RbiIntegration.Service.BaseClasses
 
             var collection = esq.GetEntityCollection(this._userConnection);
 
-            return collection.ToDictionary(e => e.GetTypedColumnValue<Guid>("Id"), e => e);
+            return collection.ToDictionary(e => e.GetTypedColumnValue<string>("Id"), e => e);
         }
     }
 }
