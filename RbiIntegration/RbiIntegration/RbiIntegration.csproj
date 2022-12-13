@@ -176,6 +176,11 @@
     <Compile Include="Service\In\CreateClientService\Model\Request\EmailData.cs" />
     <Compile Include="Service\In\CreateClientService\Model\Request\Phone.cs" />
     <Compile Include="Service\In\CreateClientService\Model\Response\CreateClientServiceResponseModel.cs" />
+    <Compile Include="Service\Profitbase\AuthToken\AuthTokenService.cs" />
+    <Compile Include="Service\Profitbase\AuthToken\Generator\AuthTokenServiceRequestGenerator.cs" />
+    <Compile Include="Service\Profitbase\AuthToken\Handler\AuthTokenServiceResponseHandler.cs" />
+    <Compile Include="Service\Profitbase\AuthToken\Model\Request\AuthTokenServiceRequestModel.cs" />
+    <Compile Include="Service\Profitbase\AuthToken\Model\Response\AuthTokenServiceResponseModel.cs" />
     <Compile Include="Service\Profitbase\ChangeRequestStatus\ChangeRequestStatusService.cs" />
     <Compile Include="Service\Profitbase\ChangeRequestStatus\Model\Request\ChangeRequestStatusServiceRequestModel.cs" />
     <Compile Include="Service\Profitbase\ChangeRequestStatus\Model\Request\payload.cs" />

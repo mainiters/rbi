@@ -1,6 +1,5 @@
 ﻿using RbiIntegration.Service.BaseClasses;
-using RbiIntegration.Service.In.Profitbase.AuthToken.Model.Response;
-using RbiIntegration.Service.In.Profitbase.Enrichment.Model.Request;
+using RbiIntegration.Service.In.Profitbase.AuthToken.Model.Request;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -8,19 +7,19 @@ using System.Text;
 using System.Threading.Tasks;
 using Terrasoft.Core;
 
-namespace RbiIntegration.Service.Profitbase.Enrichment.Generator
+namespace RbiIntegration.Service.Profitbase.AuthToken.Generator
 {
     /// <summary>
     /// Генератор запроса
     /// </summary>
-    public class EnrichmentServiceRequestGenerator : BaseRequestGenerator
+    public class AuthTokenServiceRequestGenerator : BaseRequestGenerator
     {
         /// <summary>
         /// Констурктор генератора
         /// </summary>
         /// <param name="userConnection">Соединение пользователя</param>
         /// <param name="serviceParams">Параметры сервиса</param>
-        public EnrichmentServiceRequestGenerator(UserConnection userConnection, IntegrationServiceParams serviceParams)
+        public AuthTokenServiceRequestGenerator(UserConnection userConnection, IntegrationServiceParams serviceParams)
             : base(userConnection, serviceParams)
         {
 
@@ -33,16 +32,9 @@ namespace RbiIntegration.Service.Profitbase.Enrichment.Generator
         /// <returns></returns>
         public override BaseModel GenerateModel(params Guid[] id)
         {
-            var wrapper = new ServiceWrapper(this._userConnection, "AuthToken");
-            var authRes = wrapper.SendRequest();
-
-            this._serviceParams.Token = (authRes as AuthTokenServiceResponseModel).token;
-
-            var data = ReadEntityData(id);
-
-            return new EnrichmentServiceRequestModel()
+            return new AuthTokenServiceRequestModel()
             {
-                id = data[id.First()].GetTypedColumnValue<string>("TrcRequestIdLK")
+                token = _serviceParams.Token
             };
         }
     }

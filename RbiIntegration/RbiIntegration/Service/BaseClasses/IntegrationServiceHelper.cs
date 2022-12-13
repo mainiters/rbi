@@ -133,7 +133,8 @@ namespace RbiIntegration.Service.BaseClasses
                 Url = string.IsNullOrEmpty(defaultUrl) ? entity.GetTypedColumnValue<string>("TrcUrl") : defaultUrl,
                 Login = entity.GetTypedColumnValue<string>("TrcLogin"),
                 Password = entity.GetTypedColumnValue<string>("TrcPassword"),
-                RequestType = entity.GetTypedColumnValue<string>("TrcRequestType")
+                RequestType = string.IsNullOrEmpty(entity.GetTypedColumnValue<string>("TrcRequestType")) ? "POST" : entity.GetTypedColumnValue<string>("TrcRequestType"),
+                Token = entity.GetTypedColumnValue<string>("TrcToken")
             };
         }
 

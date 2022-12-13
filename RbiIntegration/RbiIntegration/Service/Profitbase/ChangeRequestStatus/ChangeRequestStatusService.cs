@@ -37,7 +37,7 @@ namespace RbiIntegration.Service.In.Profitbase.ChangeRequestStatus
 
                 if (requestModel.payload.previousStatus == "needAgr" && requestModel.payload.nextStatus == "sendServ")
                 {
-                    var wrapper = new ServiceWrapper(this.UserConnection, "EnrichmentService");
+                    var wrapper = new ServiceWrapper(this.UserConnection, "Enrichment");
                     wrapper.SendRequest(request.PrimaryColumnValue);
                 }
             }

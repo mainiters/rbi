@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Net;
+using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
 using Terrasoft.Core;
@@ -71,17 +72,53 @@ namespace RbiIntegration.Service.BaseClasses
 
             try
             {
-                var httpWebRequest = (HttpWebRequest)WebRequest.Create(this._serviceParams.Url);
-                httpWebRequest.ContentType = "application/json";
-                httpWebRequest.Method = "POST";
+                HttpWebRequest httpWebRequest;
 
-                httpWebRequest.Credentials = new NetworkCredential(this._serviceParams.Login, this._serviceParams.Password);
-
-                using (var streamWriter = new StreamWriter(httpWebRequest.GetRequestStream()))
+                if (_serviceParams.RequestType == "POST")
                 {
-                    requestStr = JsonConvert.SerializeObject(model);
+                    httpWebRequest = (HttpWebRequest)WebRequest.Create(this._serviceParams.Url);
 
-                    streamWriter.Write(requestStr);
+                    using (var streamWriter = new StreamWriter(httpWebRequest.GetRequestStream()))
+                    {
+                        requestStr = JsonConvert.SerializeObject(model);
+
+                        streamWriter.Write(requestStr);
+                    }
+                }
+                else
+                {
+                    var getParams = new Dictionary<string, string>();
+
+                    foreach (PropertyInfo prop in model.GetType().GetProperties())
+                    {
+                        var type = Nullable.GetUnderlyingType(prop.PropertyType) ?? prop.PropertyType;
+
+                        if (type == typeof(string))
+                        {
+                            getParams.Add(prop.Name, prop.GetValue(model, null).ToString());
+                        }
+                    }
+
+                    var url = this._serviceParams.Url + "?";
+
+                    foreach (var item in getParams)
+                    {
+                        url += $"{item.Key}={item.Value}&";
+                    }
+
+                    httpWebRequest = (HttpWebRequest)WebRequest.Create(url);
+                }
+
+                httpWebRequest.ContentType = "application/json";
+                httpWebRequest.Method = _serviceParams.RequestType;
+
+                if (!string.IsNullOrEmpty(this._serviceParams.Token))
+                {
+                    httpWebRequest.Headers.Add("Authorization", "Bearer " + this._serviceParams.Token);
+                }
+                else
+                {
+                    httpWebRequest.Credentials = new NetworkCredential(this._serviceParams.Login, this._serviceParams.Password);
                 }
 
                 var httpResponse = (HttpWebResponse)httpWebRequest.GetResponse();

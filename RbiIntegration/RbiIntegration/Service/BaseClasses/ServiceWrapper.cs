@@ -1,4 +1,5 @@
-﻿using RbiIntegration.Service.In.Profitbase.Enrichment;
+﻿using RbiIntegration.Service.In.Profitbase.AuthToken;
+using RbiIntegration.Service.In.Profitbase.Enrichment;
 using RbiIntegration.Service.In.Profitbase.EnrichmentService;
 using System;
 using System.Collections.Generic;
@@ -89,6 +90,8 @@ namespace RbiIntegration.Service.BaseClasses
             {
                 case "Enrichment":
                     return new EnrichmentService(this._userConnection, serviceParams);
+                case "AuthToken":
+                    return new AuthTokenService(this._userConnection, serviceParams);
                 default:
                     throw new Exception($"Неизвестный код сервиса {serviceParams.ServiceName}");
             }

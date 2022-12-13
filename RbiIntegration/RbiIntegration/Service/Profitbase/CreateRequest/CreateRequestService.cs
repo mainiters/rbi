@@ -106,10 +106,10 @@ namespace RbiIntegration.Service.In.Profitbase.CreateRequest
                         });
 
                 response.Id = request.PrimaryColumnValue.ToString();
-            }
 
-            var wrapper = new ServiceWrapper(this.UserConnection, "EnrichmentService");
-            wrapper.SendRequest(request.PrimaryColumnValue);
+                var wrapper = new ServiceWrapper(this.UserConnection, "Enrichment");
+                wrapper.SendRequest(request.PrimaryColumnValue);
+            }
 
             return response;
         }
