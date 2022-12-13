@@ -34,60 +34,65 @@ namespace RbiIntegration.Service.Profitbase.Enrichment.Handler
 
             var responseModel = response as EnrichmentServiceResponseModel;
 
-            if (responseModel.passDetails != null)
+            if (!contact.GetTypedColumnValue<bool>("TrcIsEnriched"))
             {
-                contact.SetColumnValue("TrcBirthDate", DateTime.Parse(responseModel.passDetails.birthDate));
-
-                if(responseModel.passDetails.adrReg != null && !string.IsNullOrEmpty(responseModel.passDetails.adrReg.fullAddress))
+                if (responseModel.passDetails != null)
                 {
-                    contact.SetColumnValue("TrcRegistrationAddress", responseModel.passDetails.adrReg.fullAddress);
+                    contact.SetColumnValue("TrcBirthDate", DateTime.Parse(responseModel.passDetails.birthDate));
 
-                    IntegrationServiceHelper.InsertEntityWithFields(this._userConnection, "ContactAddress", new Dictionary<string, object>()
+                    if (responseModel.passDetails.adrReg != null && !string.IsNullOrEmpty(responseModel.passDetails.adrReg.fullAddress))
                     {
-                        { "ContactId", contact.PrimaryColumnValue },
-                        { "Address", responseModel.passDetails.adrReg.fullAddress },
-                        { "AddressTypeId", Guid.Parse("7E40A853-06B8-4856-9373-3B966C7153B5") }
-                    });
+                        contact.SetColumnValue("TrcRegistrationAddress", responseModel.passDetails.adrReg.fullAddress);
 
-                    IntegrationServiceHelper.InsertEntityWithFields(this._userConnection, "TrcPaymentDetails", new Dictionary<string, object>()
+                        IntegrationServiceHelper.InsertEntityWithFields(this._userConnection, "ContactAddress", new Dictionary<string, object>()
+                        {
+                            { "ContactId", contact.PrimaryColumnValue },
+                            { "Address", responseModel.passDetails.adrReg.fullAddress },
+                            { "AddressTypeId", Guid.Parse("7E40A853-06B8-4856-9373-3B966C7153B5") }
+                        });
+
+                        IntegrationServiceHelper.InsertEntityWithFields(this._userConnection, "TrcPaymentDetails", new Dictionary<string, object>()
+                        {
+                            { "TrcContactId", contact.PrimaryColumnValue },
+                            { "TrcNumber", responseModel.passDetails.numberPassport },
+                            { "TrcSeries", responseModel.passDetails.seriesPassport },
+                            { "TrcDivisionCode", responseModel.passDetails.issueCode },
+                            { "TrcDate", DateTime.Parse(responseModel.passDetails.issueDate) },
+                            { "TrcPlaceOfBirth", responseModel.passDetails.birthPlace }
+                        });
+                    }
+
+                    contact.SetColumnValue("TrcIsEnriched", true);
+
+                    contact.Save(false);
+                }
+
+                if (!string.IsNullOrEmpty(responseModel.typeServ))
+                {
+                    try
                     {
-                        { "TrcContactId", contact.PrimaryColumnValue },
-                        { "TrcNumber", responseModel.passDetails.numberPassport },
-                        { "TrcSeries", responseModel.passDetails.seriesPassport },
-                        { "TrcDivisionCode", responseModel.passDetails.issueCode },
-                        { "TrcDate", DateTime.Parse(responseModel.passDetails.issueDate) },
-                        { "TrcPlaceOfBirth", responseModel.passDetails.birthPlace }
+                        var service = IntegrationServiceHelper.GetEntityByField(this._userConnection, "TrcService", "TrcIdLKService", responseModel.typeServ);
+                        request.SetColumnValue("TrcServiceId", service.PrimaryColumnValue);
+                    }
+                    catch (Exception)
+                    {
+                        // Услуга не найдена
+                        request.SetColumnValue("TrcDescription", "Для уточнения услуги свяжитесь с клиентом");
+                    }
+                    request.Save(false);
+                }
+
+                if (responseModel.freeForm != null)
+                {
+                    IntegrationServiceHelper.InsertEntityWithFields(this._userConnection, "TrcMessagesFromPersonalAccount", new Dictionary<string, object>()
+                    {
+                        { "TrcRequestId", request.PrimaryColumnValue },
+                        { "TrcAnswer", responseModel.freeForm.comment },
+                        { "TrcResponseDate", DateTime.Now }
                     });
                 }
-
-                contact.Save(false);
             }
-
-            if (!string.IsNullOrEmpty(responseModel.typeServ))
-            {
-                try
-                {
-                    var service = IntegrationServiceHelper.GetEntityByField(this._userConnection, "TrcService", "TrcIdLKService", responseModel.typeServ);
-                    request.SetColumnValue("TrcServiceId", service.PrimaryColumnValue);
-                }
-                catch (Exception)
-                {
-                    // Услуга не найдена
-                    request.SetColumnValue("TrcDescription", "Для уточнения услуги свяжитесь с клиентом");
-                }
-                request.Save(false);
-            }
-
-            if (responseModel.freeForm != null)
-            {
-                IntegrationServiceHelper.InsertEntityWithFields(this._userConnection, "TrcMessagesFromPersonalAccount", new Dictionary<string, object>()
-                {
-                    { "TrcRequestId", request.PrimaryColumnValue },
-                    { "TrcAnswer", responseModel.freeForm.comment },
-                    { "TrcResponseDate", DateTime.Now }
-                });
-            }
-
+            
             if (responseModel.infoApproval != null)
             {
                 if (responseModel.infoApproval.solution.HasValue)
