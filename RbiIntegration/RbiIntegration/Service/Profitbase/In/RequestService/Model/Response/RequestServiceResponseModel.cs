@@ -6,13 +6,13 @@ using System.Runtime.Serialization;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace RbiIntegration.Service.Profitbase.In.CreateRequest.Model.Response
+namespace RbiIntegration.Service.Profitbase.In.RequestService.Model.Response
 {
     /// <summary>
     /// Модель ответа
     /// </summary>
     [DataContract]
-    public class CreateRequestServiceResponseModel : BaseResponse
+    public class RequestServiceResponseModel : BaseResponse
     {
         /// <summary>
         /// ID созданного обращения

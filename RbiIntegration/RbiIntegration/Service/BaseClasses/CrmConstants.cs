@@ -69,7 +69,7 @@ namespace RbiIntegration.Service.BaseClasses
             /// <summary>
             /// Сервис создания заявки
             /// </summary>
-            public static Guid CreateRequest = new Guid("00586EA7-D714-40EB-AF4F-A82FFB8090FC");
+            public static Guid Request = new Guid("00586EA7-D714-40EB-AF4F-A82FFB8090FC");
 
             /// <summary>
             /// Сервис изменения статуса заявки

@@ -49,7 +49,7 @@ namespace RbiIntegration.Service.Profitbase.Out.AuthToken
 
             var model = generator.GenerateModel(id);
 
-            return this.CallService<AuthTokenServiceResponseModel>(model, handler);
+            return this.CallService<AuthTokenServiceResponseModel>(model, handler, id);
         }
     }
 }

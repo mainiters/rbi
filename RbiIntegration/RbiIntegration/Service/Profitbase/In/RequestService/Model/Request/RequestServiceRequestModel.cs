@@ -6,24 +6,24 @@ using System.Runtime.Serialization;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace RbiIntegration.Service.Profitbase.In.CreateRequest.Model.Request
+namespace RbiIntegration.Service.Profitbase.In.RequestService.Model.Request
 {
     /// <summary>
-    /// Связанная заявка
+    /// Модель запроса
     /// </summary>
     [DataContract]
-    public class linkingDocument
+    public class RequestServiceRequestModel : BaseModel
     {
         /// <summary>
-        /// Id созданной заявки
+        /// Тип запроса
         /// </summary>
         [DataMember]
-        public string documentId { get; set; }
+        public string type { get; set; }
 
         /// <summary>
-        /// Тип заявки
+        /// Инфо по заявке
         /// </summary>
         [DataMember]
-        public string workflowType { get; set; }
+        public payload payload { get; set; }
     }
 }

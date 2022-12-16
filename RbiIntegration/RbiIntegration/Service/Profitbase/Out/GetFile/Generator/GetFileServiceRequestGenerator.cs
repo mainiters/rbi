@@ -34,7 +34,7 @@ namespace RbiIntegration.Service.Profitbase.Out.GetFile.Generator
         {
             return new GetFileServiceRequestModel()
             {
-                fileId = _serviceParams.Token
+                fileId = id.First()
             };
         }
     }

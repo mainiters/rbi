@@ -54,7 +54,7 @@ namespace RbiIntegration.Service.Profitbase.Out.GetFile
 
             var model = generator.GenerateModel(id);
 
-            return this.CallService<GetFileServiceResponseModel>(model, handler);
+            return this.CallService<GetFileServiceResponseModel>(model, handler, id);
         }
     }
 }

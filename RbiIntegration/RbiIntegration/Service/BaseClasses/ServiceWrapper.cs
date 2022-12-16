@@ -1,5 +1,6 @@
 ﻿using RbiIntegration.Service.Profitbase.Out.AuthToken;
 using RbiIntegration.Service.Profitbase.Out.EnrichmentService;
+using RbiIntegration.Service.Profitbase.Out.GetFile;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -91,6 +92,8 @@ namespace RbiIntegration.Service.BaseClasses
                     return new EnrichmentService(this._userConnection, serviceParams);
                 case "AuthToken":
                     return new AuthTokenService(this._userConnection, serviceParams);
+                case "GetFile":
+                    return new GetFileService(this._userConnection, serviceParams);
                 default:
                     throw new Exception($"Неизвестный код сервиса {serviceParams.ServiceName}");
             }

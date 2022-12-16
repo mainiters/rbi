@@ -6,7 +6,7 @@ using System.Runtime.Serialization;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace RbiIntegration.Service.Profitbase.In.ChangeRequestStatus.Model.Request
+namespace RbiIntegration.Service.Profitbase.In.RequestService.Model.Request
 {
     /// <summary>
     /// Инфо по заявке
@@ -15,16 +15,34 @@ namespace RbiIntegration.Service.Profitbase.In.ChangeRequestStatus.Model.Request
     public class payload
     {
         /// <summary>
-        /// id заявки в ЛК
+        /// Id созданной заявки
         /// </summary>
         [DataMember]
         public string documentId { get; set; }
+
+        /// <summary>
+        /// Id созданной заявки
+        /// </summary>
+        [DataMember]
+        public string documentid { get; set; }
 
         /// <summary>
         /// Тип заявки
         /// </summary>
         [DataMember]
         public string workflowType { get; set; }
+
+        /// <summary>
+        /// Связанная заявка
+        /// </summary>
+        [DataMember]
+        public linkingDocument linkingDocument { get; set; }
+
+        /// <summary>
+        /// Информация о пользователе
+        /// </summary>
+        [DataMember]
+        public user user { get; set; }
 
         /// <summary>
         /// Статус, из которого заявка перешла

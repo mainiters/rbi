@@ -134,7 +134,8 @@ namespace RbiIntegration.Service.BaseClasses
                 Login = entity.GetTypedColumnValue<string>("TrcLogin"),
                 Password = entity.GetTypedColumnValue<string>("TrcPassword"),
                 RequestType = string.IsNullOrEmpty(entity.GetTypedColumnValue<string>("TrcRequestType")) ? "POST" : entity.GetTypedColumnValue<string>("TrcRequestType"),
-                Token = entity.GetTypedColumnValue<string>("TrcToken")
+                Token = entity.GetTypedColumnValue<string>("TrcToken"),
+                UseParamsAsUrlPart = entity.GetTypedColumnValue<bool>("TrcUseParamsAsUrlPart")
             };
         }
 

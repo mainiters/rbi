@@ -18,6 +18,7 @@ namespace RbiIntegration.Service.BaseClasses
     {
         protected IntegrationServiceParams _serviceParams { get; set; }
         protected UserConnection _userConnection { get; set; }
+        protected string[] id { get; set; }
         public BaseOutService(UserConnection userConnection, IntegrationServiceParams serviceParams)
         {
             this._serviceParams = serviceParams;
@@ -26,12 +27,14 @@ namespace RbiIntegration.Service.BaseClasses
 
         public virtual BaseResponse CallService(params string[] id)
         {
+            this.id = id;
+
             var generator = GetRequestGenerator();
             var handler = GetResponseHandler();
 
-            var model = generator.GenerateModel(id);
+            var model = generator.GenerateModel(this.id);
 
-            return this.CallService<BaseResponse>(model, handler);
+            return this.CallService<BaseResponse>(model, handler, this.id);
         }
 
         /// <summary>
@@ -56,9 +59,11 @@ namespace RbiIntegration.Service.BaseClasses
         /// Вызов сервиса
         /// </summary>
         /// <returns></returns>
-        protected virtual T CallService<T>(BaseModel model, BaseResponseHandler handler)
+        protected virtual T CallService<T>(BaseModel model, BaseResponseHandler handler, params string[] id)
             where T : BaseResponse
         {
+
+            this.id = id;
 
             DateTime requestInitDate = DateTime.Now;
 
@@ -99,11 +104,23 @@ namespace RbiIntegration.Service.BaseClasses
                         }
                     }
 
-                    var url = this._serviceParams.Url + "?";
+                    var url = this._serviceParams.Url;
+
+                    if (!this._serviceParams.UseParamsAsUrlPart)
+                    {
+                        url += "?";
+                    }
 
                     foreach (var item in getParams)
                     {
-                        url += $"{item.Key}={item.Value}&";
+                        if (this._serviceParams.UseParamsAsUrlPart)
+                        {
+                            url += $"/{item.Value}";
+                        }
+                        else
+                        {
+                            url += $"{item.Key}={item.Value}&";
+                        }
                     }
 
                     httpWebRequest = (HttpWebRequest)WebRequest.Create(url);
@@ -134,7 +151,7 @@ namespace RbiIntegration.Service.BaseClasses
                 
                 resultObject = JsonConvert.DeserializeObject<T>(responseStr);
 
-                handler.Handle(resultObject);
+                handler.Handle(resultObject, this.id);
             }
             catch (WebException ex)
             {

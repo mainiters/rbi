@@ -50,5 +50,10 @@ namespace RbiIntegration.Service.BaseClasses
         /// Тип запроса
         /// </summary>
         public string RequestType { get; set; }
+
+        /// <summary>
+        /// Использовать параметры как часть УРЛа
+        /// </summary>
+        public bool UseParamsAsUrlPart { get; set; }
     }
 }

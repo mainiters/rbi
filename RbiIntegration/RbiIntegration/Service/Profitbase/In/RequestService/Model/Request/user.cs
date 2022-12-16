@@ -6,7 +6,7 @@ using System.Runtime.Serialization;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace RbiIntegration.Service.Profitbase.In.CreateRequest.Model.Request
+namespace RbiIntegration.Service.Profitbase.In.RequestService.Model.Request
 {
     /// <summary>
     /// Информация о пользователе

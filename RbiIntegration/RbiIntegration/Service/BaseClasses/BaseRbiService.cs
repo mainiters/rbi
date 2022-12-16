@@ -4,6 +4,7 @@ using System.Linq;
 using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
+using Terrasoft.Core;
 using Terrasoft.Web.Common;
 using static RbiIntegration.Service.BaseClasses.CrmConstants;
 
@@ -23,6 +24,13 @@ namespace RbiIntegration.Service.BaseClasses
 
         public BaseRbiService()
         {
+            this.RequiredFields = new List<string>();
+        }
+
+        public UserConnection UserConnection { get; protected set; }
+        public BaseRbiService(UserConnection UserConnection)
+        {
+            this.UserConnection = UserConnection;
             this.RequiredFields = new List<string>();
         }
 

@@ -90,6 +90,8 @@ namespace RbiIntegration.Service.Profitbase.Out.Enrichment.Handler
                         { "TrcAnswer", responseModel.freeForm.comment },
                         { "TrcResponseDate", DateTime.Now }
                     });
+
+                    ProcessDocs(responseModel.freeForm.doc);
                 }
             }
             
@@ -103,6 +105,36 @@ namespace RbiIntegration.Service.Profitbase.Out.Enrichment.Handler
                 request.SetColumnValue("TrcRejectionReason", responseModel.infoApproval.comment);
 
                 request.Save(false);
+
+                ProcessDocs(responseModel.infoApproval.doc);
+            }
+
+            if (responseModel.infoRevision != null)
+            {
+                IntegrationServiceHelper.InsertEntityWithFields(this._userConnection, "TrcMessagesFromPersonalAccount", new Dictionary<string, object>()
+                {
+                    { "TrcRequestId", request.PrimaryColumnValue },
+                    { "TrcAnswer", responseModel.infoRevision.comment },
+                    { "TrcResponseDate", DateTime.Now }
+                });
+
+                ProcessDocs(responseModel.infoRevision.doc);
+            }
+        }
+
+        /// <summary>
+        /// Запросить документы
+        /// </summary>
+        /// <param name="docs"></param>
+        protected void ProcessDocs(doc[] docs)
+        {
+            if (docs != null)
+            {
+                foreach (var item in docs)
+                {
+                    var wrapper = new ServiceWrapper(this._userConnection, "GetFile");
+                    wrapper.SendRequest(item.FileSrc);
+                }
             }
         }
     }

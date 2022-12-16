@@ -31,6 +31,32 @@ namespace RbiIntegration.Service.Profitbase.Out.GetFile.Handler
         public override void Handle(BaseResponse response, params string[] id)
         {
             var responseModel = response as GetFileServiceResponseModel;
+
+            try
+            {
+                var request = IntegrationServiceHelper.GetEntityByField(this._userConnection, "TrcRequest", "TrcRequestIdLK", responseModel.documentId);
+
+                byte[] bytesFile = Convert.FromBase64String(responseModel.base64Content);
+
+                IntegrationServiceHelper.InsertOrUpdateEntity(this._userConnection, "TrcRequestFile", "Name", responseModel.name, new Dictionary<string, object>()
+                {
+                    { "TrcRequestId", request.PrimaryColumnValue },
+                    { "Name", responseModel.name },
+                    { "TypeId", Guid.Parse("529BC2F8-0EE0-DF11-971B-001D60E938C6") },
+                    { "SysFileStorageId", Guid.Parse("38AB9812-9BBA-4EB8-86D0-8F352CD0229C") },
+                    { "Version", 1 },
+                    { "Data", bytesFile }
+                },
+                new Dictionary<string, object>()
+                {
+                    { "TrcRequest", request.PrimaryColumnValue }
+                });
+            }
+            catch (Exception ex)
+            {
+            }
+
+            responseModel.base64Content = "...";
         }
     }
 }

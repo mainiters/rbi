@@ -45,7 +45,7 @@ namespace RbiIntegration.Service.Profitbase.Out.EnrichmentService
         public override BaseResponse CallService(params string[] id)
         {
             var wrapper = new ServiceWrapper(this._userConnection, "AuthToken");
-            var authRes = wrapper.SendRequest();
+            var authRes = wrapper.SendRequest(id);
 
             this._serviceParams.Token = (authRes as AuthTokenServiceResponseModel).token;
 
@@ -54,7 +54,7 @@ namespace RbiIntegration.Service.Profitbase.Out.EnrichmentService
 
             var model = generator.GenerateModel(id);
 
-            return this.CallService<EnrichmentServiceResponseModel>(model, handler);
+            return this.CallService<EnrichmentServiceResponseModel>(model, handler, id);
         }
     }
 }
