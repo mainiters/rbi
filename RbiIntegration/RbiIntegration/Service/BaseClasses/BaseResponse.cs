@@ -22,8 +22,25 @@ namespace RbiIntegration.Service.BaseClasses
         /// <summary>
         /// Код ответа
         /// </summary>
-        [DataMember]
-        public int Code { get; set; }
+        public int Code
+        {
+            get
+            {
+                return Result ? 200 : 500;
+            }
+            set
+            {
+                code = value;
+            }
+        }
+
+        public bool ShouldSerializeCode()
+        {
+            return false;
+        }
+
+        protected int code { get; set; }
+
 
         /// <summary>
         /// Сообщение
@@ -35,7 +52,6 @@ namespace RbiIntegration.Service.BaseClasses
         /// <summary>
         /// Описание
         /// </summary>
-        [DataMember]
         public string ReasonPhrase
         {
             get
@@ -49,7 +65,12 @@ namespace RbiIntegration.Service.BaseClasses
                 Exception = value;
             }
         }
-        
+
+        public bool ShouldSerializeReasonPhrase()
+        {
+            return false;
+        }
+
         protected string reasonPhrase;
 
         /// <summary>

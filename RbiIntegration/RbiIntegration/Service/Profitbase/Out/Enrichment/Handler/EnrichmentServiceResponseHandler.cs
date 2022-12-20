@@ -84,12 +84,19 @@ namespace RbiIntegration.Service.Profitbase.Out.Enrichment.Handler
 
                 if (responseModel.freeForm != null)
                 {
-                    IntegrationServiceHelper.InsertEntityWithFields(this._userConnection, "TrcMessagesFromPersonalAccount", new Dictionary<string, object>()
+                    if (!string.IsNullOrEmpty(responseModel.freeForm.comment))
                     {
-                        { "TrcRequestId", request.PrimaryColumnValue },
-                        { "TrcAnswer", responseModel.freeForm.comment },
-                        { "TrcResponseDate", DateTime.Now }
-                    });
+                        IntegrationServiceHelper.InsertOrUpdateEntity(this._userConnection, "TrcMessagesFromPersonalAccount", "TrcAnswer", responseModel.freeForm.comment, new Dictionary<string, object>()
+                        {
+                            { "TrcRequestId", request.PrimaryColumnValue },
+                            { "TrcAnswer", responseModel.freeForm.comment },
+                            { "TrcResponseDate", DateTime.Now }
+                        }, 
+                        new Dictionary<string, object>()
+                        {
+                            { "TrcRequest", request.PrimaryColumnValue }
+                        });
+                    }
 
                     ProcessDocs(responseModel.freeForm.doc);
                 }
@@ -111,11 +118,15 @@ namespace RbiIntegration.Service.Profitbase.Out.Enrichment.Handler
 
             if (responseModel.infoRevision != null)
             {
-                IntegrationServiceHelper.InsertEntityWithFields(this._userConnection, "TrcMessagesFromPersonalAccount", new Dictionary<string, object>()
+                IntegrationServiceHelper.InsertOrUpdateEntity(this._userConnection, "TrcMessagesFromPersonalAccount", "TrcAnswer", responseModel.infoRevision.comment, new Dictionary<string, object>()
                 {
                     { "TrcRequestId", request.PrimaryColumnValue },
                     { "TrcAnswer", responseModel.infoRevision.comment },
                     { "TrcResponseDate", DateTime.Now }
+                },
+                new Dictionary<string, object>()
+                {
+                    { "TrcRequest", request.PrimaryColumnValue }
                 });
 
                 ProcessDocs(responseModel.infoRevision.doc);

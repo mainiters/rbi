@@ -19,5 +19,14 @@ namespace RbiIntegration.Service.Profitbase.In.RequestService.Model.Response
         /// </summary>
         [DataMember]
         public string Id { get; set; }
+
+        [DataMember]
+        public new bool Result { get; set; }
+
+        /// <summary>
+        /// Код ответа
+        /// </summary>
+        [DataMember]
+        public new int Code { get; set; }
     }
 }

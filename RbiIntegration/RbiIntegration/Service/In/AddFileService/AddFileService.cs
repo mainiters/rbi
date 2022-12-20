@@ -9,6 +9,7 @@ using System.ServiceModel.Activation;
 using System.ServiceModel.Web;
 using System.Text;
 using System.Threading.Tasks;
+using Terrasoft.Core;
 using Terrasoft.Core.Entities;
 using Terrasoft.Web.Common;
 using static RbiIntegration.Service.BaseClasses.CrmConstants;
@@ -22,6 +23,11 @@ namespace RbiIntegration.Service.In.AddFileService
     [AspNetCompatibilityRequirements(RequirementsMode = AspNetCompatibilityRequirementsMode.Required)]
     public class AddFileService : BaseRbiService<AddFileServiceRequestModel, AddFileServiceResponseModel>
     {
+        public AddFileService(UserConnection UserConnection) : base(UserConnection)
+        {
+
+        }
+
         protected override Guid GetIntegrationServiceId()
         {
             return CrmConstants.TrcIntegrationServices.AddFile;

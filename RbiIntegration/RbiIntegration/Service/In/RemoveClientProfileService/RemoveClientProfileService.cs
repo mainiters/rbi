@@ -9,6 +9,7 @@ using System.ServiceModel.Activation;
 using System.ServiceModel.Web;
 using System.Text;
 using System.Threading.Tasks;
+using Terrasoft.Core;
 using Terrasoft.Core.DB;
 using Terrasoft.Core.Entities;
 using Terrasoft.Web.Common;
@@ -23,6 +24,11 @@ namespace RbiIntegration.Service.In.RemoveClientProfileService
     [AspNetCompatibilityRequirements(RequirementsMode = AspNetCompatibilityRequirementsMode.Required)]
     public class RemoveClientProfileService : BaseRbiService<RemoveClientProfileServiceRequestModel, RemoveClientProfileServiceResponseModel>
     {
+        public RemoveClientProfileService(UserConnection UserConnection) : base(UserConnection)
+        {
+
+        }
+
         protected override Guid GetIntegrationServiceId()
         {
             return CrmConstants.TrcIntegrationServices.RemoveClientProfile;

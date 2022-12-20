@@ -22,11 +22,6 @@ namespace RbiIntegration.Service.BaseClasses
         /// </summary>
         protected List<string> RequiredFields { get; private set; }
 
-        public BaseRbiService()
-        {
-            this.RequiredFields = new List<string>();
-        }
-
         public UserConnection UserConnection { get; protected set; }
         public BaseRbiService(UserConnection UserConnection)
         {

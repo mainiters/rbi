@@ -14,6 +14,7 @@ using Terrasoft.Core.Entities;
 using Terrasoft.Web.Common;
 using static RbiIntegration.Service.BaseClasses.CrmConstants;
 using RbiIntegration.Service.BaseClasses.Extensions;
+using Terrasoft.Core;
 
 namespace RbiIntegration.Service.In.CheckClientExistingService
 {
@@ -24,6 +25,11 @@ namespace RbiIntegration.Service.In.CheckClientExistingService
     [AspNetCompatibilityRequirements(RequirementsMode = AspNetCompatibilityRequirementsMode.Required)]
     public class CheckClientExistingService : BaseRbiService<CheckClientExistingServiceRequestModel, CheckClientExistingServiceResponseModel>
     {
+        public CheckClientExistingService(UserConnection UserConnection) : base(UserConnection)
+        {
+
+        }
+
         protected override Guid GetIntegrationServiceId()
         {
             return CrmConstants.TrcIntegrationServices.CheckClientExisting;
