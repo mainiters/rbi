@@ -88,6 +88,7 @@ namespace RbiIntegration.Service.Profitbase.In.RequestService
                         response.Code = 500;
                         response.Result = false;
                         response.ReasonPhrase = $"Для номера телефона {requestModel.payload.user.phonenumber} найдено более одного контакта";
+                        return response;
                     }
                     else if (entities.Count == 1)
                     {

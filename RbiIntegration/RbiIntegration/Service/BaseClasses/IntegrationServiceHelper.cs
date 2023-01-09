@@ -366,6 +366,31 @@ namespace RbiIntegration.Service.BaseClasses
         }
 
         /// <summary>
+        /// Получить запись сущности по значению поля
+        /// </summary>
+        /// <param name="schemaName">Название схемы сущности</param>
+        /// <param name="fieldName">Название поля для поиска</param>
+        /// <param name="fieldValue">Значение поля для поиска</param>
+        /// <returns></returns>
+        public static EntityCollection GetEntitiesByField(UserConnection userConnection, string schemaName, string fieldName, object fieldValue)
+        {
+            EntitySchema schema = userConnection.EntitySchemaManager.GetInstanceByName(schemaName);
+
+            EntitySchemaQuery esq = new EntitySchemaQuery(schema)
+            {
+                UseAdminRights = true,
+                CanReadUncommitedData = true,
+                IgnoreDisplayValues = true
+            };
+
+            esq.AddAllSchemaColumns();
+
+            esq.Filters.Add(esq.CreateFilterWithParameters(FilterComparisonType.Equal, fieldName, fieldValue));
+
+            return esq.GetEntityCollection(userConnection);
+        }
+
+        /// <summary>
         /// Вставка новой записи в таблицу БД
         /// </summary>
         /// <param name="userConnection">Подключение пользователя</param>

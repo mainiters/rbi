@@ -6,18 +6,18 @@ using System.Runtime.Serialization;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace RbiIntegration.Service.Profitbase.In.RequestService.Model.Response
+namespace RbiIntegration.Service.Profitbase.In.ContractsListService.Model.Response
 {
     /// <summary>
     /// Модель ответа
     /// </summary>
     [DataContract]
-    public class RequestServiceResponseModel : BaseResponse
+    public class ContractsListServiceResponseModel : BaseResponse
     {
         /// <summary>
-        /// ID созданного обращения
+        /// Данные по договорам
         /// </summary>
         [DataMember]
-        public string Id { get; set; }
+        public ContractData[] ContractData { get; set; }
     }
 }
