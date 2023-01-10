@@ -30,7 +30,7 @@ namespace RbiIntegration.Service.Profitbase.In.ContractsListService
 
         protected override Guid GetIntegrationServiceId()
         {
-            return CrmConstants.TrcIntegrationServices.Request;
+            return CrmConstants.TrcIntegrationServices.ContractsList;
         }
 
         [WebInvoke(Method = "POST", RequestFormat = WebMessageFormat.Json, BodyStyle = WebMessageBodyStyle.Wrapped,
@@ -100,10 +100,10 @@ namespace RbiIntegration.Service.Profitbase.In.ContractsListService
                 esqContracts.AddAllSchemaColumns();
                 esqContracts.AddColumn("State.Name");
 
-                esqContracts.Filters.Add(esqContracts.CreateFilterWithParameters(FilterComparisonType.Equal, "ContactId", contact.PrimaryDisplayColumnValue));
-                esqContracts.Filters.Add(esqContracts.CreateFilterWithParameters(FilterComparisonType.NotEqual, "StateId", Guid.Parse("BB08517B-C579-4831-975A-E9E870CCDCEB")));
-                esqContracts.Filters.Add(esqContracts.CreateFilterWithParameters(FilterComparisonType.NotEqual, "TrcTypeId", Guid.Parse("C34EB927-F8C0-И 4D31-8686-12BB423BB42E")));
-                esqContracts.Filters.Add(esqContracts.CreateIsNotNullFilter("TrcOpportunityId"));
+                esqContracts.Filters.Add(esqContracts.CreateFilterWithParameters(FilterComparisonType.Equal, "Contact", contact.PrimaryColumnValue));
+                esqContracts.Filters.Add(esqContracts.CreateFilterWithParameters(FilterComparisonType.NotEqual, "State",    Guid.Parse("BB08517B-C579-4831-975A-E9E870CCDCEB")));
+                esqContracts.Filters.Add(esqContracts.CreateFilterWithParameters(FilterComparisonType.NotEqual, "TrcType",  Guid.Parse("C34EB927-F8C0-4D31-8686-12BB423BB42E")));
+                esqContracts.Filters.Add(esqContracts.CreateIsNotNullFilter("TrcOpportunity"));
 
                 var contracts = esqContracts.GetEntityCollection(this.UserConnection);
 
