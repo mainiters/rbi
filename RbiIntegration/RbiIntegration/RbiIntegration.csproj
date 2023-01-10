@@ -176,6 +176,12 @@
     <Compile Include="Service\In\CreateClientService\Model\Request\EmailData.cs" />
     <Compile Include="Service\In\CreateClientService\Model\Request\Phone.cs" />
     <Compile Include="Service\In\CreateClientService\Model\Response\CreateClientServiceResponseModel.cs" />
+    <Compile Include="Service\Profitbase\In\ContractsInfoService\ContractsInfoService.cs" />
+    <Compile Include="Service\Profitbase\In\ContractsInfoService\Model\Request\ContractsInfoServiceRequestModel.cs" />
+    <Compile Include="Service\Profitbase\In\ContractsInfoService\Model\Response\ContractsInfoServiceResponseModel.cs" />
+    <Compile Include="Service\Profitbase\In\ContractsInfoService\Model\Response\General.cs" />
+    <Compile Include="Service\Profitbase\In\ContractsInfoService\Model\Response\Buyer.cs" />
+    <Compile Include="Service\Profitbase\In\ContractsInfoService\Model\Response\KeyValueData.cs" />
     <Compile Include="Service\Profitbase\In\ContractsListService\Model\Request\ContractsListServiceRequestModel.cs" />
     <Compile Include="Service\Profitbase\In\ContractsListService\Model\Response\ContractData.cs" />
     <Compile Include="Service\Profitbase\In\ContractsListService\Model\Response\ContractsListServiceResponseModel.cs" />

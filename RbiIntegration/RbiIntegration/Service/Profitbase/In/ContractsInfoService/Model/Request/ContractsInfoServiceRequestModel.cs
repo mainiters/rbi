@@ -1,0 +1,23 @@
+﻿using RbiIntegration.Service.BaseClasses;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Runtime.Serialization;
+using System.Text;
+using System.Threading.Tasks;
+
+namespace RbiIntegration.Service.Profitbase.In.ContractsInfoService.Model.Request
+{
+    /// <summary>
+    /// Модель запроса
+    /// </summary>
+    [DataContract]
+    public class ContractsInfoServiceRequestModel : BaseModel
+    {
+        /// <summary>
+        /// ID договора
+        /// </summary>
+        [DataMember]
+        public string contractId { get; set; }
+    }
+}
