@@ -62,9 +62,15 @@ namespace RbiIntegration.Service.Profitbase.In.ContractsInfoService
                     return response;
                 }
 
-                request = IntegrationServiceHelper.GetEntityByField(this.UserConnection, "TrcRequest", "TrcContractRequest", requestModel.contractId);
+                esq = new EntitySchemaQuery(this.UserConnection.EntitySchemaManager, "TrcRequest");
 
-                if (request.GetTypedColumnValue<Guid>("TrcRequestTypeId") == Guid.Parse("512F0D01-99C1-4C1B-8AD2-9DCD4C56ABC6"))
+                esq.AddAllSchemaColumns();
+
+                esq.Filters.Add(esq.CreateFilterWithParameters(FilterComparisonType.Equal, "TrcContractRequest", requestModel.contractId));
+
+                request = esq.GetEntityCollection(this.UserConnection).FirstOrDefault();
+
+                if (request != null && request.GetTypedColumnValue<Guid>("TrcRequestTypeId") == Guid.Parse("512F0D01-99C1-4C1B-8AD2-9DCD4C56ABC6"))
                 {
                     if (request.GetTypedColumnValue<Guid>("TrcServiceId") == Guid.Parse("82983928-3428-4201-B44F-E181F711873D")
                         && request.GetTypedColumnValue<Guid>("TrcRequestStatusId") != Guid.Parse("19ECC014-1CF2-412E-B918-9D898E04AB1D")
@@ -98,7 +104,7 @@ namespace RbiIntegration.Service.Profitbase.In.ContractsInfoService
 
                 opportunity = esq.GetEntityCollection(this.UserConnection).FirstOrDefault();
 
-                if (opportunity != null && opportunity.GetColumnValue("TrcFinalFreeCalculation") != null && opportunity.GetTypedColumnValue<bool>("TrcContractSigned"))
+                if (opportunity != null && opportunity.GetColumnValue("TrcFinalFreeCalculationId") != null && opportunity.GetTypedColumnValue<bool>("TrcContractSigned"))
                 {
                     response.availPaymentSchedule = 1;
                 }
@@ -148,9 +154,9 @@ namespace RbiIntegration.Service.Profitbase.In.ContractsInfoService
                 esq.AddAllSchemaColumns();
                 
                 esq.AddColumn("Contact.Name");
-                esq.AddColumn("OppContactRole.Name");
+                esq.AddColumn("Role.Name");
                 
-                esq.Filters.Add(esq.CreateFilterWithParameters(FilterComparisonType.Equal, "TrcOpportunityId", contract.GetTypedColumnValue<Guid>("TrcOpportunityId")));
+                esq.Filters.Add(esq.CreateFilterWithParameters(FilterComparisonType.Equal, "Opportunity", contract.GetTypedColumnValue<Guid>("TrcOpportunityId")));
 
                 var opportunityContacts = esq.GetEntityCollection(this.UserConnection);
 
@@ -163,7 +169,7 @@ namespace RbiIntegration.Service.Profitbase.In.ContractsInfoService
                         buyers.Add(new Buyer()
                         {
                             name = item.GetTypedColumnValue<string>("Contact_Name"),
-                            role = item.GetTypedColumnValue<string>("OppContactRole_Name"),
+                            role = item.GetTypedColumnValue<string>("Role_Name"),
                             share = item.GetTypedColumnValue<string>("TrcOwnershipShare")
                         });
                     }
