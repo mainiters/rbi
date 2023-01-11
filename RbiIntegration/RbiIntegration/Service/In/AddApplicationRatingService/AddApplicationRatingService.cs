@@ -54,7 +54,7 @@ namespace RbiIntegration.Service.In.AddApplicationRatingService
             {
                 { "TrcRequestId", request.PrimaryColumnValue },
                 { "TrcRating", requestModel.TrcRating },
-                { "TrcRatingDescription", requestModel.TrcRatingDescription },
+                { "TrcRatingDescription", string.IsNullOrEmpty(requestModel.TrcRatingDescription) ? string.Empty : requestModel.TrcRatingDescription },
             });
 
             return response;
@@ -64,7 +64,6 @@ namespace RbiIntegration.Service.In.AddApplicationRatingService
         {
             requiredFields.Add("TrcRequestId");
             requiredFields.Add("TrcRating");
-            requiredFields.Add("TrcRatingDescription");
         }
     }
 }

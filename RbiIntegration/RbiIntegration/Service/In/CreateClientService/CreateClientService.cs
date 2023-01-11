@@ -119,8 +119,6 @@ namespace RbiIntegration.Service.In.CreateClientService
             requiredFields.Add("Phones");
             requiredFields.Add("TrcDomopultID");
             requiredFields.Add("Name");
-            requiredFields.Add("ProductId");
-            requiredFields.Add("TrcContactRoleForObjectId");
             requiredFields.Add("TrcDomopultCreatedOn");
         }
 

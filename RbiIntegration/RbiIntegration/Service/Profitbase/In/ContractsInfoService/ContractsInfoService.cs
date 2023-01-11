@@ -30,7 +30,7 @@ namespace RbiIntegration.Service.Profitbase.In.ContractsInfoService
 
         protected override Guid GetIntegrationServiceId()
         {
-            return CrmConstants.TrcIntegrationServices.ContractsList;
+            return CrmConstants.TrcIntegrationServices.ContractsInfo;
         }
 
         [WebInvoke(Method = "POST", RequestFormat = WebMessageFormat.Json, BodyStyle = WebMessageBodyStyle.Wrapped,
