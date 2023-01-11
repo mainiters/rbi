@@ -176,6 +176,16 @@
     <Compile Include="Service\In\CreateClientService\Model\Request\EmailData.cs" />
     <Compile Include="Service\In\CreateClientService\Model\Request\Phone.cs" />
     <Compile Include="Service\In\CreateClientService\Model\Response\CreateClientServiceResponseModel.cs" />
+    <Compile Include="Service\Profitbase\In\ContractsManualSettService\ContractsManualSettService.cs" />
+    <Compile Include="Service\Profitbase\In\ContractsManualSettService\Model\Request\ContractsInfoServiceRequestModel.cs" />
+    <Compile Include="Service\Profitbase\In\ContractsManualSettService\Model\Response\AgreemDoc.cs" />
+    <Compile Include="Service\Profitbase\In\ContractsManualSettService\Model\Response\ConsentCheck.cs" />
+    <Compile Include="Service\Profitbase\In\ContractsManualSettService\Model\Response\ContractsManualSettServiceResponseModel.cs" />
+    <Compile Include="Service\Profitbase\In\ContractsManualSettService\Model\Response\Alert.cs" />
+    <Compile Include="Service\Profitbase\In\ContractsManualSettService\Model\Response\Document.cs" />
+    <Compile Include="Service\Profitbase\In\ContractsManualSettService\Model\Response\Documents.cs" />
+    <Compile Include="Service\Profitbase\In\ContractsManualSettService\Model\Response\Measurement.cs" />
+    <Compile Include="Service\Profitbase\In\ContractsManualSettService\Model\Response\KeyValueData.cs" />
     <Compile Include="Service\Profitbase\In\ContractsInfoService\ContractsInfoService.cs" />
     <Compile Include="Service\Profitbase\In\ContractsInfoService\Model\Request\ContractsInfoServiceRequestModel.cs" />
     <Compile Include="Service\Profitbase\In\ContractsInfoService\Model\Response\ContractsInfoServiceResponseModel.cs" />
@@ -187,6 +197,7 @@
     <Compile Include="Service\Profitbase\In\ContractsListService\Model\Response\ContractsListServiceResponseModel.cs" />
     <Compile Include="Service\Profitbase\In\ContractsListService\Model\Response\KeyValueData.cs" />
     <Compile Include="Service\Profitbase\In\ContractsListService\ContractsListService.cs" />
+    <Compile Include="Service\Profitbase\In\ContractsManualSettService\Model\Response\Prompt.cs" />
     <Compile Include="Service\Profitbase\Out\GetFile\GetFileService.cs" />
     <Compile Include="Service\Profitbase\Out\GetFile\Generator\GetFileServiceRequestGenerator.cs" />
     <Compile Include="Service\Profitbase\Out\GetFile\Handler\GetFileServiceResponseHandler.cs" />
