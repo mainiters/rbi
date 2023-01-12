@@ -17,7 +17,7 @@ using static RbiIntegration.Service.BaseClasses.CrmConstants;
 namespace RbiIntegration.Service.Profitbase.In.ContractsManualSettService
 {
     /// <summary>
-    /// Сервис получения списка доступных договоров
+    /// Сервис получения текущего статуса взаиморасчетов
     /// </summary>
     [ServiceContract]
     [AspNetCompatibilityRequirements(RequirementsMode = AspNetCompatibilityRequirementsMode.Required)]
@@ -30,7 +30,7 @@ namespace RbiIntegration.Service.Profitbase.In.ContractsManualSettService
 
         protected override Guid GetIntegrationServiceId()
         {
-            return CrmConstants.TrcIntegrationServices.ContractsInfo;
+            return CrmConstants.TrcIntegrationServices.ContractsManualSett;
         }
 
         [WebInvoke(Method = "POST", RequestFormat = WebMessageFormat.Json, BodyStyle = WebMessageBodyStyle.Wrapped,
@@ -38,12 +38,14 @@ namespace RbiIntegration.Service.Profitbase.In.ContractsManualSettService
         protected override ContractsManualSettServiceResponseModel ProcessBusinessLogic(ContractsManualSettServiceRequestModel requestModel, ContractsManualSettServiceResponseModel response)
         {
             Entity contract = null;
+            Entity request = null;
 
             try
             {
                 var esq = new EntitySchemaQuery(this.UserConnection.EntitySchemaManager, "Contract");
 
                 esq.AddAllSchemaColumns();
+
                 esq.AddColumn("TrcType.Name");
                 esq.AddColumn("State.Name");
                 esq.AddColumn("Parent.Number");
@@ -59,6 +61,87 @@ namespace RbiIntegration.Service.Profitbase.In.ContractsManualSettService
                     response.ReasonPhrase = $"Запись с id {requestModel.contractId} не найдена";
                     return response;
                 }
+
+                esq = new EntitySchemaQuery(this.UserConnection.EntitySchemaManager, "TrcRequest");
+
+                esq.AddAllSchemaColumns();
+
+                esq.AddColumn("TrcObjectProfitbase.TrcObjectId");
+                esq.AddColumn("TrcOpportunity.TrcObject.TrcObjectId");
+
+                esq.Filters.Add(esq.CreateFilterWithParameters(FilterComparisonType.Equal, "TrcContractRequest", requestModel.contractId));
+                esq.Filters.Add(esq.CreateFilterWithParameters(FilterComparisonType.Equal, "TrcRequestType", Guid.Parse("512F0D01-99C1-4C1B-8AD2-9DCD4C56ABC6")));
+                esq.Filters.Add(esq.CreateFilterWithParameters(FilterComparisonType.Equal, "TrcService", Guid.Parse("82983928-3428-4201-B44F-E181F711873D")));
+                esq.Filters.Add(esq.CreateFilterWithParameters(FilterComparisonType.NotEqual, "TrcRequestStatus", Guid.Parse("19ECC014-1CF2-412E-B918-9D898E04AB1D")));
+                esq.Filters.Add(esq.CreateFilterWithParameters(FilterComparisonType.NotEqual, "TrcRequestStatus", Guid.Parse("0743199E-CDC5-493F-88FB-BF5777720814")));
+
+                request = esq.GetEntityCollection(this.UserConnection).FirstOrDefault();
+
+                if (request != null)
+                {
+                    if (request.GetColumnValue("TrcObjectProfitbaseId") != null)
+                    {
+                        response.objectId = request.GetTypedColumnValue<int>("TrcObjectProfitbase_TrcObjectId");
+                    }
+                    else
+                    {
+                        response.objectId = request.GetTypedColumnValue<int>("TrcOpportunity_TrcObject_TrcObjectId");
+                    }
+
+                    if (request.GetTypedColumnValue<float>("TrcProjectArea") != 0
+                        && request.GetTypedColumnValue<float>("TrcAreaPIB") != 0
+                        && request.GetTypedColumnValue<float>("TrcDeviationInSquareMeters") != 0
+                        && request.GetTypedColumnValue<float>("TrcAmountDeviation") != 0)
+                    {
+                        var measurementsData = new List<KeyValueData>();
+
+                        measurementsData.Add(new KeyValueData()
+                        {
+                            name = "Плановая площадь",
+                            value = request.GetTypedColumnValue<string>("TrcProjectArea")
+                        });
+
+                        measurementsData.Add(new KeyValueData()
+                        {
+                            name = "Фактическая площадь",
+                            value = request.GetTypedColumnValue<string>("TrcAreaPIB")
+                        });
+
+                        measurementsData.Add(new KeyValueData()
+                        {
+                            name = "Разница площадей",
+                            value = Math.Abs(request.GetTypedColumnValue<float>("TrcDeviationInSquareMeters")).ToString()
+                        });
+
+                        measurementsData.Add(new KeyValueData()
+                        {
+                            name = request.GetTypedColumnValue<float>("TrcDeviationInSquareMeters") <= -1 ? "Сумма доплаты" : "Сумма возврата",
+                            value = Math.Abs(request.GetTypedColumnValue<float>("TrcAmountDeviation")).ToString()
+                        });
+
+                        response.measurements = new Measurement()
+                        {
+                            position = 3,
+                            headInfo = "Расчет площади и суммы",
+                            data = measurementsData.ToArray()
+                        };
+
+                        response.alert = new Alert()
+                        {
+                            position = 1,
+                            headAl = "Заголовок алерта",
+                            textAl = "Текст алерта",
+                            color = "info"
+                        };
+
+                        response.prompt = new Prompt()
+                        {
+                            position = 2,
+                            text = "Текстовая подсказка клиенту"
+                        };
+                    }
+                }
+
             }
             catch (Exception ex)
             {

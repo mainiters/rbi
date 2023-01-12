@@ -100,7 +100,7 @@ namespace RbiIntegration.Service.Profitbase.In.ContractsListService
                 esqContracts.AddAllSchemaColumns();
                 esqContracts.AddColumn("State.Name");
 
-                esqContracts.Filters.Add(esqContracts.CreateFilterWithParameters(FilterComparisonType.Equal, "Contact", contact.PrimaryColumnValue));
+                esqContracts.Filters.Add(esqContracts.CreateFilterWithParameters(FilterComparisonType.Equal, "TrcContact", contact.PrimaryColumnValue));
                 esqContracts.Filters.Add(esqContracts.CreateFilterWithParameters(FilterComparisonType.NotEqual, "State",    Guid.Parse("BB08517B-C579-4831-975A-E9E870CCDCEB")));
                 esqContracts.Filters.Add(esqContracts.CreateFilterWithParameters(FilterComparisonType.NotEqual, "TrcType",  Guid.Parse("C34EB927-F8C0-4D31-8686-12BB423BB42E")));
                 esqContracts.Filters.Add(esqContracts.CreateIsNotNullFilter("TrcOpportunity"));
@@ -113,7 +113,7 @@ namespace RbiIntegration.Service.Profitbase.In.ContractsListService
                 {
                     contractsData.Add(new ContractData()
                     {
-                        contractId = item.GetTypedColumnValue<string>("ContactId"),
+                        contractId = item.GetTypedColumnValue<string>("Id"),
                         contractNum = item.GetTypedColumnValue<string>("Number"),
                         contractDate = item.GetTypedColumnValue<DateTime>("TrcContractDate").ToString("dd-MM-yyyy"),
                         stateContract = new KeyValueData()

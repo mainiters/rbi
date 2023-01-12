@@ -12,7 +12,7 @@ namespace RbiIntegration.Service.Profitbase.In.ContractsListService.Model.Respon
     /// Модель ответа
     /// </summary>
     [DataContract]
-    public class ContractData : BaseResponse
+    public class ContractData
     {
         /// <summary>
         /// Идентификатор договора в CRM

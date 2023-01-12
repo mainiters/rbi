@@ -18,7 +18,7 @@ namespace RbiIntegration.Service.Profitbase.In.ContractsManualSettService.Model.
         /// Идентификатор объекта недвижимости по договору
         /// </summary>
         [DataMember]
-        public int objectId { get; set; }
+        public int? objectId { get; set; }
 
         /// <summary>
         /// Таблица о произведенных переобмерах

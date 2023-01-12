@@ -12,7 +12,7 @@ namespace RbiIntegration.Service.Profitbase.In.ContractsInfoService.Model.Respon
     /// Ключ-Значение
     /// </summary>
     [DataContract]
-    public class Buyer : BaseResponse
+    public class Buyer
     {
         /// <summary>
         /// ФИО

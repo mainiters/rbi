@@ -86,6 +86,10 @@ namespace RbiIntegration.Service.BaseClasses
             /// </summary>
             public static Guid ContractsInfo = new Guid("638E961B-C9BB-42F1-94BD-95CBFB9456C6");
 
+            /// <summary>
+            /// Сервис получения текущего статуса взаиморасчетов
+            /// </summary>
+            public static Guid ContractsManualSett = new Guid("A1F19930-5932-426E-9222-13E72A0BBA78");
         }
     }
 }

@@ -12,7 +12,7 @@ namespace RbiIntegration.Service.Profitbase.In.ContractsInfoService.Model.Respon
     /// Ключ-Значение
     /// </summary>
     [DataContract]
-    public class KeyValueData : BaseResponse
+    public class KeyValueData
     {
         /// <summary>
         /// Ключ
