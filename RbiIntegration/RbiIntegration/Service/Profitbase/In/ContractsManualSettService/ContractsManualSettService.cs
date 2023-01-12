@@ -79,13 +79,25 @@ namespace RbiIntegration.Service.Profitbase.In.ContractsManualSettService
 
                 if (request != null)
                 {
+                    var TrcObjectId = string.Empty;
+
                     if (request.GetColumnValue("TrcObjectProfitbaseId") != null)
                     {
-                        response.objectId = request.GetTypedColumnValue<int>("TrcObjectProfitbase_TrcObjectId");
+                        TrcObjectId = request.GetTypedColumnValue<string>("TrcObjectProfitbase_TrcObjectId");
                     }
                     else
                     {
-                        response.objectId = request.GetTypedColumnValue<int>("TrcOpportunity_TrcObject_TrcObjectId");
+                        TrcObjectId = request.GetTypedColumnValue<string>("TrcOpportunity_TrcObject_TrcObjectId");
+                    }
+
+                    if (!string.IsNullOrEmpty(TrcObjectId))
+                    {
+                        int val;
+
+                        if (int.TryParse(TrcObjectId, out val))
+                        {
+                            response.objectId = val;
+                        }
                     }
 
                     if (request.GetTypedColumnValue<float>("TrcProjectArea") != 0

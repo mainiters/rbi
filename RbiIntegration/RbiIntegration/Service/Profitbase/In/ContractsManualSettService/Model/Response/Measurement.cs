@@ -12,7 +12,7 @@ namespace RbiIntegration.Service.Profitbase.In.ContractsManualSettService.Model.
     /// Таблица о произведенных переобмерах
     /// </summary>
     [DataContract]
-    public class Measurement : BaseResponse
+    public class Measurement
     {
         /// <summary>
         /// Расположение блока на странице

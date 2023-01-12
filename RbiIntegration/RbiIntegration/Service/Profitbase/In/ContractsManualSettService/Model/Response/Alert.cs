@@ -12,7 +12,7 @@ namespace RbiIntegration.Service.Profitbase.In.ContractsManualSettService.Model.
     /// Уведомление клиенту
     /// </summary>
     [DataContract]
-    public class Alert : BaseResponse
+    public class Alert
     {
         /// <summary>
         /// Расположение блока на странице
