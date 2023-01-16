@@ -110,26 +110,60 @@ namespace RbiIntegration.Service.Profitbase.In.ContractsManualSettService
                         measurementsData.Add(new KeyValueData()
                         {
                             name = "Плановая площадь",
-                            value = request.GetTypedColumnValue<string>("TrcProjectArea")
+                            value = request.GetTypedColumnValue<string>("TrcProjectArea").Replace(",00", "")
                         });
 
                         measurementsData.Add(new KeyValueData()
                         {
                             name = "Фактическая площадь",
-                            value = request.GetTypedColumnValue<string>("TrcAreaPIB")
+                            value = request.GetTypedColumnValue<string>("TrcAreaPIB").Replace(",00", "")
                         });
+
+                        var TrcDeviationInSquareMeters = request.GetTypedColumnValue<float>("TrcDeviationInSquareMeters");
 
                         measurementsData.Add(new KeyValueData()
                         {
                             name = "Разница площадей",
-                            value = Math.Abs(request.GetTypedColumnValue<float>("TrcDeviationInSquareMeters")).ToString()
+                            value = Math.Abs(TrcDeviationInSquareMeters).ToString().Replace(",00", "")
                         });
 
-                        measurementsData.Add(new KeyValueData()
+                        if (TrcDeviationInSquareMeters < -1)
                         {
-                            name = request.GetTypedColumnValue<float>("TrcDeviationInSquareMeters") <= -1 ? "Сумма доплаты" : "Сумма возврата",
-                            value = Math.Abs(request.GetTypedColumnValue<float>("TrcAmountDeviation")).ToString()
-                        });
+                            measurementsData.Add(new KeyValueData()
+                            {
+                                name = "Сумма доплаты",
+                                value = Math.Abs(request.GetTypedColumnValue<float>("TrcAmountDeviation")).ToString().Replace(",00", "")
+                            });
+                        }
+                        else if(TrcDeviationInSquareMeters > 1)
+                        {
+                            measurementsData.Add(new KeyValueData()
+                            {
+                                name = "Сумма возврата",
+                                value = Math.Abs(request.GetTypedColumnValue<float>("TrcAmountDeviation")).ToString().Replace(",00", "")
+                            });
+                        }
+
+                        if(TrcDeviationInSquareMeters >= 1 || TrcDeviationInSquareMeters <= -1)
+                        {
+                            measurementsData.Add(new KeyValueData()
+                            {
+                                name = "Долевой взнос по договору",
+                                value = request.GetTypedColumnValue<string>("TrcSharedContributionUnderContract").Replace(",00", "")
+                            });
+
+                            measurementsData.Add(new KeyValueData()
+                            {
+                                name = "Средняя стоимость кв. м по договору",
+                                value = request.GetTypedColumnValue<string>("TrcAveragePricePerSquareMeterUnderContract").Replace(",00", "")
+                            });
+
+                            measurementsData.Add(new KeyValueData()
+                            {
+                                name = "Общая сумма после ПИБ",
+                                value = request.GetTypedColumnValue<string>("TrcTotalAmountAfterPIB").Replace(",00", "")
+                            });
+                        }
 
                         response.measurements = new Measurement()
                         {

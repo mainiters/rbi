@@ -86,7 +86,9 @@ namespace RbiIntegration.Service.Profitbase.In.ContractsListService
                     }
                     else
                     {
-                        contact = entities.First();
+                        var contactCommunication = entities.First();
+
+                        contact = IntegrationServiceHelper.GetEntityByField(this.UserConnection, "Contact", "Id", contactCommunication.GetTypedColumnValue<Guid>("ContactId"));
 
                         contact.SetColumnValue("TrcProfitbaseLKId", requestModel.clientId);
                         contact.SetColumnValue("TrcPersonalAccount", true);

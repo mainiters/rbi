@@ -100,6 +100,8 @@ namespace RbiIntegration.Service.Profitbase.In.ContractsInfoService
 
                 esq.AddAllSchemaColumns();
 
+                esq.AddColumn("TrcObject.TrcObjectId");
+
                 esq.Filters.Add(esq.CreateFilterWithParameters(FilterComparisonType.Equal, "Id", contract.GetTypedColumnValue<Guid>("TrcOpportunityId")));
 
                 opportunity = esq.GetEntityCollection(this.UserConnection).FirstOrDefault();
@@ -136,7 +138,7 @@ namespace RbiIntegration.Service.Profitbase.In.ContractsInfoService
                     new KeyValueData()
                     {
                         name = "Стоимость договора",
-                        value = contract.GetTypedColumnValue<string>("TrcContractPrice")
+                        value = contract.GetTypedColumnValue<string>("TrcContractPrice").Replace(",00", "")
                     }
                 };
 
@@ -182,6 +184,16 @@ namespace RbiIntegration.Service.Profitbase.In.ContractsInfoService
                     data = values.ToArray(),
                     buyers = buyers.ToArray()
                 };
+
+                if (opportunity.GetColumnValue("TrcObject_TrcObjectId") != null)
+                {
+                    int val;
+
+                    if (int.TryParse(opportunity.GetTypedColumnValue<string>("TrcObject_TrcObjectId"), out val))
+                    {
+                        response.objectId = val;
+                    }
+                }
             }
             catch (Exception ex)
             {

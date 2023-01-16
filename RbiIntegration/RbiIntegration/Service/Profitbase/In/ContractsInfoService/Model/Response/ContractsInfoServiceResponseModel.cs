@@ -18,7 +18,7 @@ namespace RbiIntegration.Service.Profitbase.In.ContractsInfoService.Model.Respon
         /// Идентификатор объекта недвижимости по договору
         /// </summary>
         [DataMember]
-        public int objectId { get; set; }
+        public int? objectId { get; set; }
 
         /// <summary>
         /// Наличие таба взаиморасчеты
