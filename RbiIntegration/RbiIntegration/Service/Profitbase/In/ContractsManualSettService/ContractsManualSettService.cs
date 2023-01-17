@@ -144,7 +144,7 @@ namespace RbiIntegration.Service.Profitbase.In.ContractsManualSettService
                             });
                         }
 
-                        if(TrcDeviationInSquareMeters >= 1 || TrcDeviationInSquareMeters <= -1)
+                        if(TrcDeviationInSquareMeters > 1 || TrcDeviationInSquareMeters < -1)
                         {
                             measurementsData.Add(new KeyValueData()
                             {
