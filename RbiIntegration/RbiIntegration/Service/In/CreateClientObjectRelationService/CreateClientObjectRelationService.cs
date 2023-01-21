@@ -28,7 +28,7 @@ namespace RbiIntegration.Service.In.CreateClientObjectRelationService
 
         }
 
-        protected override Guid GetIntegrationServiceId()
+        protected override Guid GetIntegrationServiceId(CreateClientObjectRelationServiceRequestModel requestModel)
         {
             return CrmConstants.TrcIntegrationServices.CreateClientObjectRelation;
         }
@@ -69,7 +69,7 @@ namespace RbiIntegration.Service.In.CreateClientObjectRelationService
             {
                 try
                 {
-                    product = IntegrationServiceHelper.FindLookupItem(this.UserConnection, "Product", requestModel.TrcObjectId, "Id", false, false).Entity;
+                    product = IntegrationServiceHelper.FindLookupItem(this.UserConnection, "Product", requestModel.TrcObjectId, "Code", false, false).Entity;
 
                     product.SetColumnValue("TrcPersonalAccount", requestModel.TrcPersonalAccount);
                     product.Save();
@@ -78,7 +78,7 @@ namespace RbiIntegration.Service.In.CreateClientObjectRelationService
                 {
                     response.Result = false;
                     response.Code = 104004;
-                    response.ReasonPhrase = $"Объект с id {requestModel.TrcObjectId} не найден";
+                    response.ReasonPhrase = $"Объект с кодом {requestModel.TrcObjectId} не найден";
                 }
             }
 
@@ -86,7 +86,7 @@ namespace RbiIntegration.Service.In.CreateClientObjectRelationService
             {
                 var connectionObjectWithContact = IntegrationServiceHelper.InsertEntityWithFields(this.UserConnection, "TrcConnectionObjectWithContact", new Dictionary<string, object>()
                     {
-                        { "TrcObjectId", requestModel.TrcObjectId },
+                        { "TrcObjectId", product.PrimaryColumnValue },
                         { "TrcContactId", requestModel.TrcContactId },
                         { "TrcContactRoleForObjectId", requestModel.TrcContactRoleForObjectId },
                         { "TrcCreatedByDomopult", true }

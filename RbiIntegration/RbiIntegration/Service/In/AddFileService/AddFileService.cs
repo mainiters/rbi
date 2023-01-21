@@ -28,7 +28,7 @@ namespace RbiIntegration.Service.In.AddFileService
 
         }
 
-        protected override Guid GetIntegrationServiceId()
+        protected override Guid GetIntegrationServiceId(AddFileServiceRequestModel requestModel)
         {
             return CrmConstants.TrcIntegrationServices.AddFile;
         }

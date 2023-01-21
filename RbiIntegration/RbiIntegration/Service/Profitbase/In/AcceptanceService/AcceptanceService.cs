@@ -28,9 +28,14 @@ namespace RbiIntegration.Service.Profitbase.In.AcceptanceService
             this.UserConnection = UserConnection;
         }
 
-        protected override Guid GetIntegrationServiceId()
+        protected override Guid GetIntegrationServiceId(AcceptanceServiceRequestModel requestModel)
         {
-            return CrmConstants.TrcIntegrationServices.ContractsList;
+            if (requestModel.type == "acceptanceDate")
+            {
+                return CrmConstants.TrcIntegrationServices.AcceptanceDate;
+            }
+
+            return CrmConstants.TrcIntegrationServices.AcceptanceDocument;
         }
 
         [WebInvoke(Method = "POST", RequestFormat = WebMessageFormat.Json, BodyStyle = WebMessageBodyStyle.Wrapped,
@@ -66,7 +71,7 @@ namespace RbiIntegration.Service.Profitbase.In.AcceptanceService
                         if (requestModel.payload.acceptance == 1)
                         {
                             request.SetColumnValue("TrcAcceptanceDate", DateTime.Parse(requestModel.payload.date));
-                            request.SetColumnValue("TrcAcceptanceTime", DateTime.Parse(requestModel.payload.time));
+                            request.SetColumnValue("TrcAcceptanceTime", DateTime.Parse(requestModel.payload.time).TimeOfDay);
                         }
 
                         request.Save(false);

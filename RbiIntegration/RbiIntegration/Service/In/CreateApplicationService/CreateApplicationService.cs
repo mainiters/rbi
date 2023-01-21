@@ -28,7 +28,7 @@ namespace RbiIntegration.Service.In.CreateApplicationService
 
         }
 
-        protected override Guid GetIntegrationServiceId()
+        protected override Guid GetIntegrationServiceId(CreateApplicationServiceRequestModel requestModel)
         {
             return CrmConstants.TrcIntegrationServices.CreateApplication;
         }
@@ -68,13 +68,13 @@ namespace RbiIntegration.Service.In.CreateApplicationService
 
             try
             {
-                product = IntegrationServiceHelper.GetEntityByField(this.UserConnection, "Product", "Id", requestModel.ProductId);
+                product = IntegrationServiceHelper.GetEntityByField(this.UserConnection, "Product", "Code", requestModel.ProductId);
             }
             catch (Exception ex)
             {
                 response.Result = false;
                 response.Code = 104004;
-                response.ReasonPhrase = $"Объект с id {requestModel.ProductId} не найден";
+                response.ReasonPhrase = $"Объект с кодом {requestModel.ProductId} не найден";
                 return response;
             }
 

@@ -28,7 +28,7 @@ namespace RbiIntegration.Service.Profitbase.In.ContractsManualSettService
             this.UserConnection = UserConnection;
         }
 
-        protected override Guid GetIntegrationServiceId()
+        protected override Guid GetIntegrationServiceId(ContractsManualSettServiceRequestModel requestModel)
         {
             return CrmConstants.TrcIntegrationServices.ContractsManualSett;
         }

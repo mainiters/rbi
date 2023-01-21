@@ -29,7 +29,7 @@ namespace RbiIntegration.Service.In.RemoveClientObjectRelationService
 
         }
 
-        protected override Guid GetIntegrationServiceId()
+        protected override Guid GetIntegrationServiceId(RemoveClientObjectRelationServiceRequestModel requestModel)
         {
             return CrmConstants.TrcIntegrationServices.RemoveClientObjectRelation;
         }

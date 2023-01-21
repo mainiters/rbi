@@ -27,7 +27,7 @@ namespace RbiIntegration.Service.In.AddApplicationRatingService
         {
 
         }
-        protected override Guid GetIntegrationServiceId()
+        protected override Guid GetIntegrationServiceId(AddApplicationRatingServiceRequestModel requestModel)
         {
             return CrmConstants.TrcIntegrationServices.AddApplicationRating;
         }

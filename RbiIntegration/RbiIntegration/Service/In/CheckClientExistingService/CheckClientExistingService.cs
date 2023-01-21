@@ -30,7 +30,7 @@ namespace RbiIntegration.Service.In.CheckClientExistingService
 
         }
 
-        protected override Guid GetIntegrationServiceId()
+        protected override Guid GetIntegrationServiceId(CheckClientExistingServiceRequestModel requestModel)
         {
             return CrmConstants.TrcIntegrationServices.CheckClientExisting;
         }

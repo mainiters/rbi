@@ -29,7 +29,7 @@ namespace RbiIntegration.Service.In.RemoveClientProfileService
 
         }
 
-        protected override Guid GetIntegrationServiceId()
+        protected override Guid GetIntegrationServiceId(RemoveClientProfileServiceRequestModel requestModel)
         {
             return CrmConstants.TrcIntegrationServices.RemoveClientProfile;
         }

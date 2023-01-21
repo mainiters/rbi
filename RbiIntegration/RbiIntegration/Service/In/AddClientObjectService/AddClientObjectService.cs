@@ -30,7 +30,7 @@ namespace RbiIntegration.Service.In.AddClientObjectService
 
         }
 
-        protected override Guid GetIntegrationServiceId()
+        protected override Guid GetIntegrationServiceId(AddClientObjectServiceRequestModel requestModel)
         {
             return CrmConstants.TrcIntegrationServices.AddClientObject;
         }
@@ -110,7 +110,7 @@ namespace RbiIntegration.Service.In.AddClientObjectService
             {
                 try
                 {
-                    product = IntegrationServiceHelper.FindLookupItem(this.UserConnection, "Product", requestModel.ProductId, "Id", false, false).Entity;
+                    product = IntegrationServiceHelper.FindLookupItem(this.UserConnection, "Product", requestModel.ProductId, "Code", false, false).Entity;
 
                     product.SetColumnValue("TrcPersonalAccount", requestModel.TrcPersonalAccount);
                     product.Save();
@@ -119,7 +119,7 @@ namespace RbiIntegration.Service.In.AddClientObjectService
                 {
                     response.Result = false;
                     response.Code = 104004;
-                    response.ReasonPhrase = $"Объект с id {requestModel.ProductId} не найден";
+                    response.ReasonPhrase = $"Объект с кодом {requestModel.ProductId} не найден";
                 }
             }
 

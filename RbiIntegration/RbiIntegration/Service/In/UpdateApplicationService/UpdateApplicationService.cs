@@ -28,7 +28,7 @@ namespace RbiIntegration.Service.In.UpdateApplicationService
 
         }
 
-        protected override Guid GetIntegrationServiceId()
+        protected override Guid GetIntegrationServiceId(UpdateApplicationServiceRequestModel requestModel)
         {
             return CrmConstants.TrcIntegrationServices.UpdateApplication;
         }

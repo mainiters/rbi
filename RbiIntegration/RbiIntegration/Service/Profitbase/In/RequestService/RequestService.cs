@@ -28,7 +28,7 @@ namespace RbiIntegration.Service.Profitbase.In.RequestService
             this.UserConnection = UserConnection;
         }
 
-        protected override Guid GetIntegrationServiceId()
+        protected override Guid GetIntegrationServiceId(RequestServiceRequestModel requestModel)
         {
             return CrmConstants.TrcIntegrationServices.Request;
         }

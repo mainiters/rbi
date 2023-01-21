@@ -67,7 +67,7 @@ namespace RbiIntegration.Service.BaseClasses
             }
             finally
             {
-                IntegrationServiceHelper.Log(UserConnection, new IntegrationServiceParams() { Id = this.GetIntegrationServiceId() }, requestInitDate, title, uid, response.Exception, request, IntegrationServiceHelper.ToJson(response), response != null ? response.Code : 0);
+                IntegrationServiceHelper.Log(UserConnection, new IntegrationServiceParams() { Id = this.GetIntegrationServiceId(requestModel) }, requestInitDate, title, uid, response.Exception, request, IntegrationServiceHelper.ToJson(response), response != null ? response.Code : 0);
             }
 
             return response;
@@ -77,7 +77,7 @@ namespace RbiIntegration.Service.BaseClasses
         /// Получение ИД интеграционного сервиса
         /// </summary>
         /// <returns></returns>
-        protected abstract Guid GetIntegrationServiceId();
+        protected abstract Guid GetIntegrationServiceId(Rq request);
 
         /// <summary>
         /// Бизнеовая логика обработки запроса

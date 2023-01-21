@@ -28,7 +28,7 @@ namespace RbiIntegration.Service.In.CreateClientService
 
         }
 
-        protected override Guid GetIntegrationServiceId()
+        protected override Guid GetIntegrationServiceId(CreateClientServiceRequestModel requestModel)
         {
             return CrmConstants.TrcIntegrationServices.CreateClient;
         }
