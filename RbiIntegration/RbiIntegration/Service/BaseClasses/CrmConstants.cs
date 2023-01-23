@@ -110,8 +110,11 @@ namespace RbiIntegration.Service.BaseClasses
             /// Сервис получения списка доступных тайм-слотов
             /// </summary>
             public static Guid ContractsAssignmentOfTimeSlots = new Guid("EC5AB027-DC44-4F23-9A20-3A82C53B2900");
-            
 
+            /// <summary>
+            /// Сервис получения текущего статуса приемки
+            /// </summary>
+            public static Guid AcceptanceStatus = new Guid("");
         }
     }
 }
