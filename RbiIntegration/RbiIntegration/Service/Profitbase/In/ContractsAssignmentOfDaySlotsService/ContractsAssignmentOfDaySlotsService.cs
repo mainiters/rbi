@@ -30,7 +30,7 @@ namespace RbiIntegration.Service.Profitbase.In.ContractsAssignmentOfDaySlotsServ
 
         protected override Guid GetIntegrationServiceId(ContractsAssignmentOfDaySlotsServiceRequestModel requestModel)
         {
-            return CrmConstants.TrcIntegrationServices.ContractsInfo;
+            return CrmConstants.TrcIntegrationServices.ContractsAssignmentOfDaySlots;
         }
 
         [WebInvoke(Method = "POST", RequestFormat = WebMessageFormat.Json, BodyStyle = WebMessageBodyStyle.Wrapped,
@@ -47,7 +47,6 @@ namespace RbiIntegration.Service.Profitbase.In.ContractsAssignmentOfDaySlotsServ
 
                 esq.AddAllSchemaColumns();
 
-                esq.Filters.Add(esq.CreateFilterWithParameters(FilterComparisonType.Equal, "TrcOpportunity", contract.GetTypedColumnValue<Guid>("TrcOpportunityId")));
                 esq.Filters.Add(esq.CreateFilterWithParameters(FilterComparisonType.Equal, "TrcOpportunity", contract.GetTypedColumnValue<Guid>("TrcOpportunityId")));
                 esq.Filters.Add(esq.CreateFilterWithParameters(FilterComparisonType.Equal, "TrcContact", contract.GetTypedColumnValue<Guid>("TrcContactId")));
 

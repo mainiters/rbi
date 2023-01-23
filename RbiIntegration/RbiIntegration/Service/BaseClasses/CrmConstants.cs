@@ -101,6 +101,17 @@ namespace RbiIntegration.Service.BaseClasses
             /// </summary>
             public static Guid AcceptanceDocument = new Guid("83B2AB2B-2029-4A4D-93B9-6ED878B9F5DB");
 
+            /// <summary>
+            /// Сервис получения списка доступных дат
+            /// </summary>
+            public static Guid ContractsAssignmentOfDaySlots = new Guid("1B4C446C-A9DA-444A-8056-8906A4706E71");
+
+            /// <summary>
+            /// Сервис получения списка доступных тайм-слотов
+            /// </summary>
+            public static Guid ContractsAssignmentOfTimeSlots = new Guid("EC5AB027-DC44-4F23-9A20-3A82C53B2900");
+            
+
         }
     }
 }

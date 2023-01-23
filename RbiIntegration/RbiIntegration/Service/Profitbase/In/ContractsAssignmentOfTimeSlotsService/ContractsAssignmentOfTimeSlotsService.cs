@@ -30,7 +30,7 @@ namespace RbiIntegration.Service.Profitbase.In.ContractsAssignmentOfTimeSlotsSer
 
         protected override Guid GetIntegrationServiceId(ContractsAssignmentOfTimeSlotsServiceRequestModel requestModel)
         {
-            return CrmConstants.TrcIntegrationServices.ContractsInfo;
+            return CrmConstants.TrcIntegrationServices.ContractsAssignmentOfTimeSlots;
         }
 
         [WebInvoke(Method = "POST", RequestFormat = WebMessageFormat.Json, BodyStyle = WebMessageBodyStyle.Wrapped,
@@ -48,7 +48,6 @@ namespace RbiIntegration.Service.Profitbase.In.ContractsAssignmentOfTimeSlotsSer
                 esq.AddAllSchemaColumns();
 
                 esq.Filters.Add(esq.CreateFilterWithParameters(FilterComparisonType.Equal, "TrcOpportunity", contract.GetTypedColumnValue<Guid>("TrcOpportunityId")));
-                esq.Filters.Add(esq.CreateFilterWithParameters(FilterComparisonType.Equal, "TrcOpportunity", contract.GetTypedColumnValue<Guid>("TrcOpportunityId")));
                 esq.Filters.Add(esq.CreateFilterWithParameters(FilterComparisonType.Equal, "TrcContact", contract.GetTypedColumnValue<Guid>("TrcContactId")));
 
                 var timeSlot = esq.GetEntityCollection(this.UserConnection).FirstOrDefault();
@@ -64,9 +63,9 @@ namespace RbiIntegration.Service.Profitbase.In.ContractsAssignmentOfTimeSlotsSer
 
                 esq.Filters.Add(esq.CreateFilterWithParameters(FilterComparisonType.Equal, "TrcObject", timeSlot.GetTypedColumnValue<Guid>("TrcObjectId")));
                 esq.Filters.Add(esq.CreateFilterWithParameters(FilterComparisonType.Equal, "TrcCheckInShedule", timeSlot.GetTypedColumnValue<Guid>("TrcCheckInSheduleId")));
-                esq.Filters.Add(esq.CreateFilterWithParameters(FilterComparisonType.Equal, "TrcTimeSlotStartDate", DateTime.Parse(requestModel.date).Date));
+                esq.Filters.Add(esq.CreateFilterWithParameters(FilterComparisonType.Equal, "TrcTimeSlotStartDate", DateTime.Parse(requestModel.date).ToString("dd.MM.yyyy")));
 
-                var times = esq.GetEntityCollection(this.UserConnection);
+                var times = esq.GetEntityCollection(this.UserConnection).OrderBy(e => e.GetTypedColumnValue<DateTime>("TrcTimeSlotStartTime"));
 
                 var timesList = new List<string>();
 
