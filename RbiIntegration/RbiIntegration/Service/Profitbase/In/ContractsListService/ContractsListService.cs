@@ -111,6 +111,46 @@ namespace RbiIntegration.Service.Profitbase.In.ContractsListService
 
                 var contractsData = new List<ContractData>();
 
+                response.ContractData = contractsData.ToArray();
+
+                var esqRequest = new EntitySchemaQuery(this.UserConnection.EntitySchemaManager, "TrcRequest");
+
+                esqRequest.Filters.Add(esqRequest.CreateFilterWithParameters(FilterComparisonType.Equal, "TrcContractRequest", contact.PrimaryColumnValue));
+                esqRequest.Filters.Add(esqRequest.CreateFilterWithParameters(FilterComparisonType.Equal, "TrcRequestType", Guid.Parse("512F0D01-99C1-4C1B-8AD2-9DCD4C56ABC6")));
+                esqRequest.Filters.Add(esqRequest.CreateFilterWithParameters(FilterComparisonType.Equal, "TrcService", Guid.Parse("82983928-3428-4201-B44F-E181F711873D")));
+                esqRequest.Filters.Add(esqRequest.CreateFilterWithParameters(FilterComparisonType.NotEqual, "TrcRequestStatus", Guid.Parse("DB6398B8-7805-4A47-8857-50FBD798207A")));
+
+                var request = esqRequest.GetEntityCollection(this.UserConnection).FirstOrDefault();
+
+                KeyValueData stateMutualSett = null;
+
+                if (request != null)
+                {
+                    stateMutualSett = new KeyValueData();
+
+                    switch (request.GetTypedColumnValue<string>("TrcRequestStatusId").ToUpper())
+                    {
+                        case "05C9EFA-7D87-41A0-B300-667F5B6F1AE9":
+                            stateMutualSett.name = "Ознакомление с изменениями";
+                            stateMutualSett.value = "#FFFACD";
+                            break;
+
+                        case "10D58AF3-70E3-4537-99D1-5C1F354179A2":
+                        case "BE30276D-100B-4DF8-9BA6-3DA5353CC9CC":
+                        case "DB6398B8-7805-4A47-8857-50FBD798207A":
+                            stateMutualSett.name = "Подписание ДС";
+                            stateMutualSett.value = "#98FB98";
+                            break;
+
+                        case "CCE08474-8A16-4246-BED3-5E4DA88101C8":
+                        case "19ECC014-1CF2-412E-B918-9D898E04AB1D":
+                        case "0743199E-CDC5-493F-88FB-BF5777720814":
+                            stateMutualSett.name = "Передача документов на регистрацию";
+                            stateMutualSett.value = "#98FB98";
+                            break;
+                    }
+                }
+
                 foreach (var item in contracts)
                 {
                     contractsData.Add(new ContractData()
@@ -122,11 +162,10 @@ namespace RbiIntegration.Service.Profitbase.In.ContractsListService
                         {
                             name = item.GetTypedColumnValue<string>("State_Name"),
                             value = "#87CEFA"
-                        }
+                        },
+                        stateMutualSett = stateMutualSett
                     });
                 }
-
-                response.ContractData = contractsData.ToArray();
             }
             catch (Exception ex)
             {

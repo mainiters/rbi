@@ -30,7 +30,7 @@ namespace RbiIntegration.Service.Profitbase.In.AcceptanceStatusService.Model.Res
         /// Список замечаний
         /// </summary>
         [DataMember]
-        public Data data { get; set; }
+        public List<Data> data { get; set; }
 
     }
 }

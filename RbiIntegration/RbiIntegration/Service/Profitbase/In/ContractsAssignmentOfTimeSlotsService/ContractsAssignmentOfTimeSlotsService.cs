@@ -63,15 +63,16 @@ namespace RbiIntegration.Service.Profitbase.In.ContractsAssignmentOfTimeSlotsSer
 
                 esq.Filters.Add(esq.CreateFilterWithParameters(FilterComparisonType.Equal, "TrcObject", timeSlot.GetTypedColumnValue<Guid>("TrcObjectId")));
                 esq.Filters.Add(esq.CreateFilterWithParameters(FilterComparisonType.Equal, "TrcCheckInShedule", timeSlot.GetTypedColumnValue<Guid>("TrcCheckInSheduleId")));
-                esq.Filters.Add(esq.CreateFilterWithParameters(FilterComparisonType.Equal, "TrcTimeSlotStartDate", DateTime.Parse(requestModel.date).ToString("dd.MM.yyyy")));
 
                 var times = esq.GetEntityCollection(this.UserConnection).OrderBy(e => e.GetTypedColumnValue<DateTime>("TrcTimeSlotStartTime"));
 
+                var timesFilteres = times.Where(e => e.GetTypedColumnValue<DateTime>("TrcStartDate").Date == DateTime.Parse(requestModel.date).Date).ToList();
+
                 var timesList = new List<string>();
 
-                foreach (var item in times)
+                foreach (var item in timesFilteres)
                 {
-                    timesList.Add(item.GetTypedColumnValue<DateTime>("TrcTimeSlotStartTime").ToString("HH:mm"));
+                    timesList.Add(item.GetTypedColumnValue<DateTime>("TrcStartDate").ToString("HH:mm"));
                 }
 
                 response.time = timesList.ToArray();

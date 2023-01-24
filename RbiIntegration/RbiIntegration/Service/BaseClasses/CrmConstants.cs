@@ -114,7 +114,7 @@ namespace RbiIntegration.Service.BaseClasses
             /// <summary>
             /// Сервис получения текущего статуса приемки
             /// </summary>
-            public static Guid AcceptanceStatus = new Guid("");
+            public static Guid AcceptanceStatus = new Guid("33C0D6B9-58C5-405B-9AB6-18FB77F30C10");
         }
     }
 }

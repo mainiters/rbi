@@ -89,7 +89,12 @@ namespace RbiIntegration.Service.Profitbase.In.AcceptanceStatusService
 
                     if (product != null)
                     {
-                        response.objectId = product.GetTypedColumnValue<int>("TrcObjectId");
+                        int objectId;
+
+                        if (int.TryParse(product.GetTypedColumnValue<string>("TrcObjectId"), out objectId))
+                        {
+                            response.objectId = objectId;
+                        }
                     }
 
                     esq = new EntitySchemaQuery(this.UserConnection.EntitySchemaManager, "TrcAssignmentOfTimeSlots");
@@ -139,6 +144,8 @@ namespace RbiIntegration.Service.Profitbase.In.AcceptanceStatusService
 
                     esq.AddAllSchemaColumns();
 
+                    esq.AddColumn("TrcRemarks.TrcName");
+
                     esq.Filters.Add(esq.CreateFilterWithParameters(FilterComparisonType.Equal, "TrcRequest", request.PrimaryColumnValue));
 
                     var remarks = esq.GetEntityCollection(this.UserConnection);
@@ -147,14 +154,39 @@ namespace RbiIntegration.Service.Profitbase.In.AcceptanceStatusService
                     {
                         response.remarks = new Remarks()
                         {
+                            position = 4,
+                            headRem = "Замечания",
+                            data = new List<Data>()
                         };
 
                         foreach (var item in remarks)
                         {
-
+                            response.remarks.data.Add(new Data()
+                            {
+                                name = item.GetTypedColumnValue<string>("TrcRemarks_TrcName"),
+                                date = item.GetTypedColumnValue<bool>("TrcStatus") ? item.GetTypedColumnValue<string>("TrcEliminationDate") : null,
+                                state = new State()
+                                {
+                                    name = item.GetTypedColumnValue<bool>("TrcStatus") ? "Устранено" : "В работе",
+                                    color = item.GetTypedColumnValue<bool>("TrcStatus") ? "#90EE90" : "#FFFACD"
+                                }
+                            });
                         }
                     }
-                    
+
+                    response.alert = new Alert()
+                    {
+                        position = 1,
+                        headAl = "Заголовок аллерта",
+                        textAl = "Текст аллерта",
+                        color = "info"
+                    };
+
+                    response.prompt = new Prompt()
+                    {
+                        position = 2,
+                        text = "Текстовая подсказка клиенту"
+                    };
                 }
             }
             catch (Exception ex)

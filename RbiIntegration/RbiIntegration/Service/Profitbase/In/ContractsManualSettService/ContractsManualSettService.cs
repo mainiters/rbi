@@ -72,8 +72,7 @@ namespace RbiIntegration.Service.Profitbase.In.ContractsManualSettService
                 esq.Filters.Add(esq.CreateFilterWithParameters(FilterComparisonType.Equal, "TrcContractRequest", requestModel.contractId));
                 esq.Filters.Add(esq.CreateFilterWithParameters(FilterComparisonType.Equal, "TrcRequestType", Guid.Parse("512F0D01-99C1-4C1B-8AD2-9DCD4C56ABC6")));
                 esq.Filters.Add(esq.CreateFilterWithParameters(FilterComparisonType.Equal, "TrcService", Guid.Parse("82983928-3428-4201-B44F-E181F711873D")));
-                esq.Filters.Add(esq.CreateFilterWithParameters(FilterComparisonType.NotEqual, "TrcRequestStatus", Guid.Parse("19ECC014-1CF2-412E-B918-9D898E04AB1D")));
-                esq.Filters.Add(esq.CreateFilterWithParameters(FilterComparisonType.NotEqual, "TrcRequestStatus", Guid.Parse("0743199E-CDC5-493F-88FB-BF5777720814")));
+                esq.Filters.Add(esq.CreateFilterWithParameters(FilterComparisonType.NotEqual, "TrcRequestStatus", Guid.Parse("DB6398B8-7805-4A47-8857-50FBD798207A")));
 
                 request = esq.GetEntityCollection(this.UserConnection).FirstOrDefault();
 
@@ -186,8 +185,51 @@ namespace RbiIntegration.Service.Profitbase.In.ContractsManualSettService
                             text = "Текстовая подсказка клиенту"
                         };
                     }
-                }
 
+                    esq = new EntitySchemaQuery(this.UserConnection.EntitySchemaManager, "TrcRequestFile");
+
+                    esq.AddAllSchemaColumns();
+
+                    esq.Filters.Add(esq.CreateFilterWithParameters(FilterComparisonType.Equal, "TrcRequest", request.PrimaryColumnValue));
+                    esq.Filters.Add(esq.CreateFilterWithParameters(FilterComparisonType.Equal, "TrcNotarialDocumentType", Guid.Parse("453249AA-F2C3-4F2B-AA78-0012CDB47F50")));
+
+                    var file = esq.GetEntityCollection(this.UserConnection).FirstOrDefault();
+
+                    if (file != null)
+                    {
+                        var ext = string.Empty;
+                        var name = string.Empty;
+
+                        var extArr = file.GetTypedColumnValue<string>("Name").Split('.');
+
+                        if (extArr.Length > 1)
+                        {
+                            ext = extArr.Last();
+                        }
+
+                        name = extArr.First();
+
+                        response.agreemDoc = new AgreemDoc()
+                        {
+                            position = 4,
+
+                            docs = new Document()
+                            {
+                                name = name,
+                                content = Convert.ToBase64String(file.GetColumnValue("Data") as byte[]),
+                                type = ext
+                            },
+                            
+                            consentCheck = new ConsentCheck()
+                            {
+                                name = "Согласовано",
+                                content = request.GetTypedColumnValue<bool>("TrcAgreed") ? 0 : 1,
+                                comment = request.GetTypedColumnValue<bool>("TrcAgreed") ? 0 : 1,
+                                fileAdd = request.GetTypedColumnValue<bool>("TrcAgreed") ? 0 : 1
+                            }
+                        };
+                    }
+                }
             }
             catch (Exception ex)
             {

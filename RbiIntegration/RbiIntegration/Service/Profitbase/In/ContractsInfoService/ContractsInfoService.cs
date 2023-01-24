@@ -85,8 +85,7 @@ namespace RbiIntegration.Service.Profitbase.In.ContractsInfoService
                 esq.AddAllSchemaColumns();
 
                 esq.Filters.Add(esq.CreateFilterWithParameters(FilterComparisonType.Equal, "TrcRequestType", Guid.Parse("619B94D9-C3EC-4187-8774-1AA017B58BD8")));
-                esq.Filters.Add(esq.CreateFilterWithParameters(FilterComparisonType.NotEqual, "TrcRequestStatus", Guid.Parse("19ECC014-1CF2-412E-B918-9D898E04AB1D")));
-                esq.Filters.Add(esq.CreateFilterWithParameters(FilterComparisonType.NotEqual, "TrcRequestStatus", Guid.Parse("0743199E-CDC5-493F-88FB-BF5777720814")));
+                esq.Filters.Add(esq.CreateFilterWithParameters(FilterComparisonType.NotEqual, "TrcRequestStatus", Guid.Parse("DB6398B8-7805-4A47-8857-50FBD798207A")));
                 esq.Filters.Add(esq.CreateFilterWithParameters(FilterComparisonType.Equal, "TrcOpportunity", contract.GetTypedColumnValue<Guid>("TrcOpportunityId")));
 
                 request = esq.GetEntityCollection(this.UserConnection).FirstOrDefault();
