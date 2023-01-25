@@ -115,6 +115,8 @@ namespace RbiIntegration.Service.Profitbase.In.ContractsListService
 
                 var esqRequest = new EntitySchemaQuery(this.UserConnection.EntitySchemaManager, "TrcRequest");
 
+                esqRequest.AddAllSchemaColumns();
+
                 esqRequest.Filters.Add(esqRequest.CreateFilterWithParameters(FilterComparisonType.Equal, "TrcContractRequest", contact.PrimaryColumnValue));
                 esqRequest.Filters.Add(esqRequest.CreateFilterWithParameters(FilterComparisonType.Equal, "TrcRequestType", Guid.Parse("512F0D01-99C1-4C1B-8AD2-9DCD4C56ABC6")));
                 esqRequest.Filters.Add(esqRequest.CreateFilterWithParameters(FilterComparisonType.Equal, "TrcService", Guid.Parse("82983928-3428-4201-B44F-E181F711873D")));
@@ -166,6 +168,8 @@ namespace RbiIntegration.Service.Profitbase.In.ContractsListService
                         stateMutualSett = stateMutualSett
                     });
                 }
+
+                response.ContractData = contractsData.ToArray();
             }
             catch (Exception ex)
             {

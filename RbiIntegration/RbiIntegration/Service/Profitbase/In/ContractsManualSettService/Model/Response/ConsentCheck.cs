@@ -25,17 +25,5 @@ namespace RbiIntegration.Service.Profitbase.In.ContractsManualSettService.Model.
         /// </summary>
         [DataMember]
         public int content { get; set; }
-
-        /// <summary>
-        /// 
-        /// </summary>
-        [DataMember]
-        public int comment { get; set; }
-
-        /// <summary>
-        /// 
-        /// </summary>
-        [DataMember]
-        public int fileAdd { get; set; }
     }
 }

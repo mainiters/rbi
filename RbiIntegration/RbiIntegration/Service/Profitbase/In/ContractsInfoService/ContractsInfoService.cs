@@ -67,17 +67,15 @@ namespace RbiIntegration.Service.Profitbase.In.ContractsInfoService
                 esq.AddAllSchemaColumns();
 
                 esq.Filters.Add(esq.CreateFilterWithParameters(FilterComparisonType.Equal, "TrcContractRequest", requestModel.contractId));
+                esq.Filters.Add(esq.CreateFilterWithParameters(FilterComparisonType.Equal, "TrcRequestType", Guid.Parse("512F0D01-99C1-4C1B-8AD2-9DCD4C56ABC6")));
+                esq.Filters.Add(esq.CreateFilterWithParameters(FilterComparisonType.Equal, "TrcService", Guid.Parse("82983928-3428-4201-B44F-E181F711873D")));
+                esq.Filters.Add(esq.CreateFilterWithParameters(FilterComparisonType.NotEqual, "TrcRequestStatus", Guid.Parse("DB6398B8-7805-4A47-8857-50FBD798207A")));
 
                 request = esq.GetEntityCollection(this.UserConnection).FirstOrDefault();
 
-                if (request != null && request.GetTypedColumnValue<Guid>("TrcRequestTypeId") == Guid.Parse("512F0D01-99C1-4C1B-8AD2-9DCD4C56ABC6"))
+                if (request != null)
                 {
-                    if (request.GetTypedColumnValue<Guid>("TrcServiceId") == Guid.Parse("82983928-3428-4201-B44F-E181F711873D")
-                        && request.GetTypedColumnValue<Guid>("TrcRequestStatusId") != Guid.Parse("19ECC014-1CF2-412E-B918-9D898E04AB1D")
-                        && request.GetTypedColumnValue<Guid>("TrcRequestStatusId") != Guid.Parse("0743199E-CDC5-493F-88FB-BF5777720814"))
-                    {
-                        response.availMutSett = 1;
-                    }
+                    response.availMutSett = 1;
                 }
 
                 esq = new EntitySchemaQuery(this.UserConnection.EntitySchemaManager, "TrcRequest");
@@ -85,7 +83,8 @@ namespace RbiIntegration.Service.Profitbase.In.ContractsInfoService
                 esq.AddAllSchemaColumns();
 
                 esq.Filters.Add(esq.CreateFilterWithParameters(FilterComparisonType.Equal, "TrcRequestType", Guid.Parse("619B94D9-C3EC-4187-8774-1AA017B58BD8")));
-                esq.Filters.Add(esq.CreateFilterWithParameters(FilterComparisonType.NotEqual, "TrcRequestStatus", Guid.Parse("DB6398B8-7805-4A47-8857-50FBD798207A")));
+                esq.Filters.Add(esq.CreateFilterWithParameters(FilterComparisonType.NotEqual, "TrcRequestStatus", Guid.Parse("19ECC014-1CF2-412E-B918-9D898E04AB1D")));
+                esq.Filters.Add(esq.CreateFilterWithParameters(FilterComparisonType.NotEqual, "TrcRequestStatus", Guid.Parse("0743199E-CDC5-493F-88FB-BF5777720814")));
                 esq.Filters.Add(esq.CreateFilterWithParameters(FilterComparisonType.Equal, "TrcOpportunity", contract.GetTypedColumnValue<Guid>("TrcOpportunityId")));
 
                 request = esq.GetEntityCollection(this.UserConnection).FirstOrDefault();

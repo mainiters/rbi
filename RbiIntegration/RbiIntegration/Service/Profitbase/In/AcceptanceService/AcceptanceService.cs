@@ -68,10 +68,85 @@ namespace RbiIntegration.Service.Profitbase.In.AcceptanceService
                             ? Guid.Parse("EFC2B317-085E-4656-AB8C-7A671E3653B3") 
                             : Guid.Parse("D297BA1D-54C6-484F-B333-64D5B8FFCBAB"));
 
+                        esq = new EntitySchemaQuery(this.UserConnection.EntitySchemaManager, "TrcAssignmentOfTimeSlots");
+
+                        esq.AddAllSchemaColumns();
+
+                        esq.Filters.Add(esq.CreateFilterWithParameters(FilterComparisonType.Equal, "TrcRequest", request.PrimaryColumnValue));
+
+                        var assignmentOfTimeSlots = esq.GetEntityCollection(this.UserConnection);
+                        var assignmentOfTimeSlot = assignmentOfTimeSlots.FirstOrDefault();
+
                         if (requestModel.payload.acceptance == 1)
                         {
                             request.SetColumnValue("TrcAcceptanceDate", DateTime.Parse(requestModel.payload.date));
                             request.SetColumnValue("TrcAcceptanceTime", DateTime.Parse(requestModel.payload.time).TimeOfDay);
+
+                            if (assignmentOfTimeSlot.GetColumnValue("TrcAssignmentTimeslotId") == null)
+                            {
+                                esq = new EntitySchemaQuery(this.UserConnection.EntitySchemaManager, "TrcTimeslots");
+
+                                esq.AddAllSchemaColumns();
+
+                                esq.Filters.Add(esq.CreateFilterWithParameters(FilterComparisonType.Equal, "TrcObject", assignmentOfTimeSlot.GetTypedColumnValue<Guid>("TrcObjectId")));
+                                esq.Filters.Add(esq.CreateFilterWithParameters(FilterComparisonType.Equal, "TrcCheckInShedule", assignmentOfTimeSlot.GetTypedColumnValue<Guid>("TrcCheckInSheduleId")));
+
+                                var timeSlots = esq.GetEntityCollection(this.UserConnection);
+
+                                if (timeSlots.Count > 0)
+                                {
+                                    var timeSlot = timeSlots.Where(e => e.GetTypedColumnValue<DateTime>("TrcStartDate").Date == DateTime.Parse(requestModel.payload.date).Date
+                                                    && e.GetTypedColumnValue<DateTime>("TrcStartDate").TimeOfDay == DateTime.Parse(requestModel.payload.date).TimeOfDay).FirstOrDefault();
+
+                                    if (timeSlot != null)
+                                    {
+                                        foreach (var item in assignmentOfTimeSlots)
+                                        {
+                                            item.SetColumnValue("TrcAssignmentTimeslotId", timeSlot.PrimaryColumnValue);
+                                            item.Save(false);
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                        else
+                        {
+                            var TrcAssignmentTimeslotId = assignmentOfTimeSlot.GetTypedColumnValue<string>("TrcAssignmentTimeslotId");
+
+                            if (!string.IsNullOrEmpty(TrcAssignmentTimeslotId))
+                            {
+                                foreach (var item in assignmentOfTimeSlots)
+                                {
+                                    item.SetColumnValue("TrcAssignmentTimeslotId", string.Empty);
+                                    item.Save(false);
+                                }
+
+                                esq = new EntitySchemaQuery(this.UserConnection.EntitySchemaManager, "TrcTimeslots");
+
+                                esq.AddAllSchemaColumns();
+
+                                esq.Filters.Add(esq.CreateFilterWithParameters(FilterComparisonType.Equal, "Id", TrcAssignmentTimeslotId));
+
+                                var timeSlot = esq.GetEntityCollection(this.UserConnection).FirstOrDefault();
+
+                                if (timeSlot != null)
+                                {
+                                    request.SetColumnValue("TrcAcceptanceDate", timeSlot.GetTypedColumnValue<DateTime>("TrcStartDate").Date);
+                                    request.SetColumnValue("TrcAcceptanceTime", timeSlot.GetTypedColumnValue<DateTime>("TrcStartDate").TimeOfDay);
+                                    request.Save(false);
+                                }
+                            }
+                            else
+                            {
+                                request.SetColumnValue("TrcAcceptanceDate", assignmentOfTimeSlot.GetTypedColumnValue<DateTime>("TrcStartDate"));
+                                request.Save(false);
+
+                                foreach (var item in assignmentOfTimeSlots)
+                                {
+                                    item.SetColumnValue("TrcDay", string.Empty);
+                                    item.Save(false);
+                                }
+                            }
                         }
 
                         request.Save(false);

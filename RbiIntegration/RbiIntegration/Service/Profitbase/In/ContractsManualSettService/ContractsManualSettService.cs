@@ -223,10 +223,11 @@ namespace RbiIntegration.Service.Profitbase.In.ContractsManualSettService
                             consentCheck = new ConsentCheck()
                             {
                                 name = "Согласовано",
-                                content = request.GetTypedColumnValue<bool>("TrcAgreed") ? 0 : 1,
-                                comment = request.GetTypedColumnValue<bool>("TrcAgreed") ? 0 : 1,
-                                fileAdd = request.GetTypedColumnValue<bool>("TrcAgreed") ? 0 : 1
-                            }
+                                content = request.GetTypedColumnValue<bool>("TrcAgreed") ? 0 : 1
+                            },
+
+                            comment = request.GetTypedColumnValue<bool>("TrcAgreed") ? 0 : 1,
+                            fileAdd = request.GetTypedColumnValue<bool>("TrcAgreed") ? 0 : 1
                         };
                     }
                 }
