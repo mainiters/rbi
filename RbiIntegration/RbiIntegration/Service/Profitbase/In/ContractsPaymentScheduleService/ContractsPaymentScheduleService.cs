@@ -48,7 +48,7 @@ namespace RbiIntegration.Service.Profitbase.In.ContractsPaymentScheduleService
 
                 esq.AddAllSchemaColumns();
 
-                esq.Filters.Add(esq.CreateFilterWithParameters(FilterComparisonType.Equal, "TrcOpportunity", contract.GetTypedColumnValue<Guid>("TrcOpportunityId")));
+                esq.Filters.Add(esq.CreateFilterWithParameters(FilterComparisonType.Equal, "Id", contract.GetTypedColumnValue<Guid>("TrcOpportunityId")));
                 esq.Filters.Add(esq.CreateIsNotNullFilter("TrcFinalFreeCalculation"));
                 esq.Filters.Add(esq.CreateFilterWithParameters(FilterComparisonType.Equal, "TrcContractSigned", true));
 
@@ -97,7 +97,7 @@ namespace RbiIntegration.Service.Profitbase.In.ContractsPaymentScheduleService
                         response.plannedPayments.Add(new PlannedPayments()
                         {
                             datePayment = item.GetTypedColumnValue<DateTime>("TrcDatePayment").ToString("dd-MM-yyyy"),
-                            amountPayment = item.GetTypedColumnValue<float>("TrcAmountPayment"),
+                            amountPayment = item.GetTypedColumnValue<decimal>("TrcAmountPayment"),
                             latePayment = item.GetTypedColumnValue<DateTime>("TrcDatePayment").Date >= DateTime.Now.Date ? 0 : 1
                         });
                     }
@@ -107,9 +107,14 @@ namespace RbiIntegration.Service.Profitbase.In.ContractsPaymentScheduleService
                         response.paidPayments.Add(new PaidPayments()
                         {
                             datePayment = item.GetTypedColumnValue<DateTime>("TrcDatePayment").ToString("dd-MM-yyyy"),
-                            amountPayment = item.GetTypedColumnValue<float>("TrcAmountPayment")
+                            amountPayment = item.GetTypedColumnValue<decimal>("TrcAmountPayment")
                         });
                     }
+
+                    var nextPayment = paymentScheduleInFreeCalculations.Where(e => !e.GetTypedColumnValue<bool>("TrcPaid") && e.GetTypedColumnValue<DateTime>("TrcDatePayment").Date >= DateTime.Now.Date).OrderBy(e => e.GetTypedColumnValue<DateTime>("TrcDatePayment")).First();
+
+                    response.nextPaymentDate = nextPayment.GetTypedColumnValue<DateTime>("TrcDatePayment").ToString("dd.MM.yyyy");
+                    response.nextPayment = nextPayment.GetTypedColumnValue<decimal>("TrcAmountPayment");
                 }
             }
             catch (Exception ex)

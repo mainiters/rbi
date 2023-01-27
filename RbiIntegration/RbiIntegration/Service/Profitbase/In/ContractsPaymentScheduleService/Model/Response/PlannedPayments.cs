@@ -24,7 +24,7 @@ namespace RbiIntegration.Service.Profitbase.In.ContractsPaymentScheduleService.M
         /// Сумма платежа в рублях
         /// </summary>
         [DataMember]
-        public float amountPayment { get; set; }
+        public decimal amountPayment { get; set; }
 
         /// <summary>
         /// Признак просрочки

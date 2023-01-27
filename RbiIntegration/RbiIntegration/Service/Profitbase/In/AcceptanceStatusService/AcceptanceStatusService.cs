@@ -69,11 +69,10 @@ namespace RbiIntegration.Service.Profitbase.In.AcceptanceStatusService
 
                 esq.AddAllSchemaColumns();
 
-                esq.Filters.Add(esq.CreateFilterWithParameters(FilterComparisonType.Equal, "TrcContractRequest", requestModel.contractId));
                 esq.Filters.Add(esq.CreateFilterWithParameters(FilterComparisonType.Equal, "TrcRequestType", Guid.Parse("619B94D9-C3EC-4187-8774-1AA017B58BD8")));
+                esq.Filters.Add(esq.CreateFilterWithParameters(FilterComparisonType.Equal, "TrcService", Guid.Parse("643131D8-43D9-40BB-BB51-A70F2F3FCB7B")));
+                esq.Filters.Add(esq.CreateFilterWithParameters(FilterComparisonType.NotEqual, "TrcRequestStatus", Guid.Parse("3C08033C-1E3A-4C71-8EEE-2F8D8DCC7A2E")));
                 esq.Filters.Add(esq.CreateFilterWithParameters(FilterComparisonType.Equal, "TrcOpportunity", contract.GetTypedColumnValue<Guid>("TrcOpportunityId")));
-                esq.Filters.Add(esq.CreateFilterWithParameters(FilterComparisonType.NotEqual, "TrcRequestStatus", Guid.Parse("19ECC014-1CF2-412E-B918-9D898E04AB1D")));
-                esq.Filters.Add(esq.CreateFilterWithParameters(FilterComparisonType.NotEqual, "TrcRequestStatus", Guid.Parse("0743199E-CDC5-493F-88FB-BF5777720814")));
 
                 request = esq.GetEntityCollection(this.UserConnection).FirstOrDefault();
 
@@ -108,7 +107,7 @@ namespace RbiIntegration.Service.Profitbase.In.AcceptanceStatusService
 
                     if (assignmentOfTimeSlot != null)
                     {
-                        if (assignmentOfTimeSlot.GetColumnValue("TrcAssignmentTimeslot") != null)
+                        if (assignmentOfTimeSlot.GetColumnValue("TrcAssignmentTimeslotId") != null)
                         {
                             response.acceptance = new Acceptance()
                             {
@@ -164,7 +163,7 @@ namespace RbiIntegration.Service.Profitbase.In.AcceptanceStatusService
                             response.remarks.data.Add(new Data()
                             {
                                 name = item.GetTypedColumnValue<string>("TrcRemarks_TrcName"),
-                                date = item.GetTypedColumnValue<bool>("TrcStatus") ? item.GetTypedColumnValue<string>("TrcEliminationDate") : null,
+                                date = item.GetTypedColumnValue<bool>("TrcStatus") ? null : item.GetTypedColumnValue<DateTime>("TrcEliminationDate").ToString("dd.MM.yyyy"),
                                 state = new State()
                                 {
                                     name = item.GetTypedColumnValue<bool>("TrcStatus") ? "Устранено" : "В работе",

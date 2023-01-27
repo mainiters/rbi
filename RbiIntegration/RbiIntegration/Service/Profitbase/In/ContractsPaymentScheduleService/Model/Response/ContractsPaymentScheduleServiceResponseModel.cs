@@ -48,7 +48,7 @@ namespace RbiIntegration.Service.Profitbase.In.ContractsPaymentScheduleService.M
         /// Сумма ближайшего платежа по графику в рублях
         /// </summary>
         [DataMember]
-        public float nextPayment { get; set; }
+        public decimal nextPayment { get; set; }
 
         /// <summary>
         /// Дата ближайшего платежа по графику
