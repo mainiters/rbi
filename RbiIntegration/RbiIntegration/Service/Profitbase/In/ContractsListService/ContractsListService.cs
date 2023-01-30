@@ -158,6 +158,8 @@ namespace RbiIntegration.Service.Profitbase.In.ContractsListService
                                 break;
                         }
                     }
+                    
+
 
                     var esq = new EntitySchemaQuery(this.UserConnection.EntitySchemaManager, "TrcRequest");
 
@@ -225,6 +227,14 @@ namespace RbiIntegration.Service.Profitbase.In.ContractsListService
                                 };
                                 break;
                         }
+                    }
+                    else
+                    {
+                        contractState = new KeyValueData()
+                        {
+                            name = "Строительство",
+                            value = "#FFFACD"
+                        };
                     }
 
                     contractsData.Add(new ContractData()

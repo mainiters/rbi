@@ -125,8 +125,8 @@ namespace RbiIntegration.Service.Profitbase.In.AcceptanceStatusService
 
                             if (timeSlot != null)
                             {
-                                response.acceptance.date = timeSlot.GetTypedColumnValue<DateTime>("TrcStartDate").Date.ToString("dd-MM-yyyy");
-                                response.acceptance.time = timeSlot.GetTypedColumnValue<DateTime>("TrcStartDate").Date.ToString("hh-mm");
+                                response.acceptance.date = timeSlot.GetTypedColumnValue<DateTime>("TrcStartDate").ToString("dd-MM-yyyy");
+                                response.acceptance.time = timeSlot.GetTypedColumnValue<DateTime>("TrcStartDate").ToString("hh-mm");
                             }
                         }
                         else

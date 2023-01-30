@@ -10,6 +10,7 @@ using System.ServiceModel.Web;
 using System.Text;
 using System.Threading.Tasks;
 using Terrasoft.Core;
+using Terrasoft.Core.DB;
 using Terrasoft.Core.Entities;
 using Terrasoft.Web.Common;
 using static RbiIntegration.Service.BaseClasses.CrmConstants;
@@ -96,7 +97,7 @@ namespace RbiIntegration.Service.Profitbase.In.AcceptanceService
                                 if (timeSlots.Count > 0)
                                 {
                                     var timeSlot = timeSlots.Where(e => e.GetTypedColumnValue<DateTime>("TrcStartDate").Date == DateTime.Parse(requestModel.payload.date).Date
-                                                    && e.GetTypedColumnValue<DateTime>("TrcStartDate").TimeOfDay == DateTime.Parse(requestModel.payload.date).TimeOfDay).FirstOrDefault();
+                                                    && e.GetTypedColumnValue<DateTime>("TrcStartDate").TimeOfDay == DateTime.Parse(requestModel.payload.time).TimeOfDay).FirstOrDefault();
 
                                     if (timeSlot != null)
                                     {
@@ -120,8 +121,11 @@ namespace RbiIntegration.Service.Profitbase.In.AcceptanceService
                             {
                                 foreach (var item in assignmentOfTimeSlots)
                                 {
-                                    item.SetColumnValue("TrcAssignmentTimeslotId", string.Empty);
-                                    item.Save(false);
+                                    Update update = new Update(this.UserConnection, "TrcAssignmentOfTimeSlots")
+                                                        .Set("TrcAssignmentTimeslotId", Column.Const((string)null))
+                                                        .Where("Id").IsEqual(Column.Parameter(item.PrimaryColumnValue)) as Update;
+
+                                    update.Execute();
                                 }
 
                                 esq = new EntitySchemaQuery(this.UserConnection.EntitySchemaManager, "TrcTimeslots");
@@ -141,13 +145,16 @@ namespace RbiIntegration.Service.Profitbase.In.AcceptanceService
                             }
                             else
                             {
-                                request.SetColumnValue("TrcAcceptanceDate", assignmentOfTimeSlot.GetTypedColumnValue<DateTime>("TrcStartDate"));
+                                request.SetColumnValue("TrcAcceptanceDate", assignmentOfTimeSlot.GetTypedColumnValue<DateTime>("TrcDay"));
                                 request.Save(false);
 
                                 foreach (var item in assignmentOfTimeSlots)
                                 {
-                                    item.SetColumnValue("TrcDay", string.Empty);
-                                    item.Save(false);
+                                    Update update = new Update(this.UserConnection, "TrcAssignmentOfTimeSlots")
+                                                        .Set("TrcDay", Column.Const((string)null))
+                                                        .Where("Id").IsEqual(Column.Parameter(item.PrimaryColumnValue)) as Update;
+
+                                    update.Execute();
                                 }
                             }
 
