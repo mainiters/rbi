@@ -166,7 +166,7 @@ namespace RbiIntegration.Service.Profitbase.In.AcceptanceService
 
                     esq.AddAllSchemaColumns();
 
-                    esq.Filters.Add(esq.CreateFilterWithParameters(FilterComparisonType.Equal, "TrcContractRequesy", contract.PrimaryColumnValue));
+                    esq.Filters.Add(esq.CreateFilterWithParameters(FilterComparisonType.Equal, "TrcContractRequest", contract.PrimaryColumnValue));
                     esq.Filters.Add(esq.CreateFilterWithParameters(FilterComparisonType.Equal, "TrcRequestType", Guid.Parse("512F0D01-99C1-4C1B-8AD2-9DCD4C56ABC6")));
                     esq.Filters.Add(esq.CreateFilterWithParameters(FilterComparisonType.Equal, "TrcService", Guid.Parse("82983928-3428-4201-B44F-E181F711873D")));
                     esq.Filters.Add(esq.CreateFilterWithParameters(FilterComparisonType.NotEqual, "TrcRequestStatus", Guid.Parse("C59DBB58-2DFE-4ABB-B22E-9A8EF3290DB2")));
@@ -185,6 +185,15 @@ namespace RbiIntegration.Service.Profitbase.In.AcceptanceService
                         }
 
                         request.Save(false);
+
+                        if (requestModel.payload.fileId != null)
+                        {
+                            foreach (var item in requestModel.payload.fileId)
+                            {
+                                var wrapper = new ServiceWrapper(this.UserConnection, "GetFile");
+                                wrapper.SendRequest(item, request.PrimaryColumnValue.ToString());
+                            }
+                        }
                     }
                 }
                 else

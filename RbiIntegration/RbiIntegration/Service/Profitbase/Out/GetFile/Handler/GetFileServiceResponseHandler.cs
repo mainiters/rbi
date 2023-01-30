@@ -34,13 +34,23 @@ namespace RbiIntegration.Service.Profitbase.Out.GetFile.Handler
 
             try
             {
-                var request = IntegrationServiceHelper.GetEntityByField(this._userConnection, "TrcRequest", "TrcRequestIdLK", responseModel.documentId);
+                string requestId = string.Empty;
+
+                if (id.Length > 1)
+                {
+                    requestId = id[1];
+                }
+                else
+                {
+                    var request = IntegrationServiceHelper.GetEntityByField(this._userConnection, "TrcRequest", "TrcRequestIdLK", responseModel.documentId);
+                    requestId = request.PrimaryColumnValue.ToString();
+                }
 
                 byte[] bytesFile = Convert.FromBase64String(responseModel.base64Content);
 
                 IntegrationServiceHelper.InsertOrUpdateEntity(this._userConnection, "TrcRequestFile", "Name", responseModel.name, new Dictionary<string, object>()
                 {
-                    { "TrcRequestId", request.PrimaryColumnValue },
+                    { "TrcRequestId", requestId },
                     { "Name", responseModel.name },
                     { "TypeId", Guid.Parse("529BC2F8-0EE0-DF11-971B-001D60E938C6") },
                     { "SysFileStorageId", Guid.Parse("38AB9812-9BBA-4EB8-86D0-8F352CD0229C") },
@@ -49,7 +59,7 @@ namespace RbiIntegration.Service.Profitbase.Out.GetFile.Handler
                 },
                 new Dictionary<string, object>()
                 {
-                    { "TrcRequest", request.PrimaryColumnValue }
+                    { "TrcRequest", requestId }
                 });
             }
             catch (Exception ex)
