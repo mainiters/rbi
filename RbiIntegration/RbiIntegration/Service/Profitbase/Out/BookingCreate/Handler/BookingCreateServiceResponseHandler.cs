@@ -1,7 +1,7 @@
 ﻿using RbiIntegration.Service.BaseClasses;
 using RbiIntegration.Service.Profitbase.Out.AuthToken.Model.Response;
 using RbiIntegration.Service.Profitbase.Out.Enrichment.Model.Response;
-using RbiIntegration.Service.Profitbase.Out.BookingCreateService.Model.Response;
+using RbiIntegration.Service.Profitbase.Out.DealCreateService.Model.Response;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -11,19 +11,19 @@ using Terrasoft.Core;
 using Terrasoft.Core.DB;
 using Terrasoft.Core.Entities;
 
-namespace RbiIntegration.Service.Profitbase.Out.BookingCreateService.Handler
+namespace RbiIntegration.Service.Profitbase.Out.DealCreateService.Handler
 {
     /// <summary>
     /// Обработчик ответа сервиса
     /// </summary>
-    public class BookingCreateServiceResponseHandler : BaseResponseHandler
+    public class DealCreateServiceResponseHandler : BaseResponseHandler
     {
         /// <summary>
         /// Констурктор обработчика ответа сервиса
         /// </summary>
         /// <param name="userConnection">Соединение пользователя</param>
         /// <param name="serviceParams">Параметры интеграционного сервиса</param>
-        public BookingCreateServiceResponseHandler(UserConnection userConnection, IntegrationServiceParams serviceParams)
+        public DealCreateServiceResponseHandler(UserConnection userConnection, IntegrationServiceParams serviceParams)
             : base(userConnection, serviceParams)
         {
 
@@ -31,7 +31,7 @@ namespace RbiIntegration.Service.Profitbase.Out.BookingCreateService.Handler
 
         public override void Handle(BaseResponse response, params string[] id)
         {
-            var responseModel = response as BookingCreateServiceResponseModel;
+            var responseModel = response as DealCreateServiceResponseModel;
 
             EntitySchema schema = this._userConnection.EntitySchemaManager.GetInstanceByName(this._serviceParams.EntitySchemaName);
 
@@ -47,7 +47,7 @@ namespace RbiIntegration.Service.Profitbase.Out.BookingCreateService.Handler
             var entity = esq.GetEntity(this._userConnection, id.First());
 
             entity.SetColumnValue("TrcProfitbaseBookingId", responseModel.documentId);
-            entity.SetColumnValue("rcProfitbaseBookingDealLink", responseModel.lkUrl);
+            entity.SetColumnValue("TrcProfitbaseBookingDealLink", responseModel.lkUrl);
 
             entity.Save(false);
         }

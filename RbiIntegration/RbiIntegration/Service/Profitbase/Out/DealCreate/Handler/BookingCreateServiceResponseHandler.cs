@@ -1,7 +1,7 @@
 ﻿using RbiIntegration.Service.BaseClasses;
 using RbiIntegration.Service.Profitbase.Out.AuthToken.Model.Response;
 using RbiIntegration.Service.Profitbase.Out.Enrichment.Model.Response;
-using RbiIntegration.Service.Profitbase.Out.BookingChangeStatusService.Model.Response;
+using RbiIntegration.Service.Profitbase.Out.BookingCreateService.Model.Response;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -11,19 +11,19 @@ using Terrasoft.Core;
 using Terrasoft.Core.DB;
 using Terrasoft.Core.Entities;
 
-namespace RbiIntegration.Service.Profitbase.Out.BookingChangeStatusService.Handler
+namespace RbiIntegration.Service.Profitbase.Out.BookingCreateService.Handler
 {
     /// <summary>
     /// Обработчик ответа сервиса
     /// </summary>
-    public class BookingChangeStatusServiceResponseHandler : BaseResponseHandler
+    public class BookingCreateServiceResponseHandler : BaseResponseHandler
     {
         /// <summary>
         /// Констурктор обработчика ответа сервиса
         /// </summary>
         /// <param name="userConnection">Соединение пользователя</param>
         /// <param name="serviceParams">Параметры интеграционного сервиса</param>
-        public BookingChangeStatusServiceResponseHandler(UserConnection userConnection, IntegrationServiceParams serviceParams)
+        public BookingCreateServiceResponseHandler(UserConnection userConnection, IntegrationServiceParams serviceParams)
             : base(userConnection, serviceParams)
         {
 
@@ -31,7 +31,7 @@ namespace RbiIntegration.Service.Profitbase.Out.BookingChangeStatusService.Handl
 
         public override void Handle(BaseResponse response, params string[] id)
         {
-            var responseModel = response as BookingChangeStatusServiceResponseModel;
+            var responseModel = response as BookingCreateServiceResponseModel;
 
             EntitySchema schema = this._userConnection.EntitySchemaManager.GetInstanceByName(this._serviceParams.EntitySchemaName);
 

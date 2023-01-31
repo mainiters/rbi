@@ -18,7 +18,7 @@ using Terrasoft.Web.Common;
 using BaseResponse = RbiIntegration.Service.BaseClasses.BaseResponse;
 using RbiIntegration.Service.Profitbase.Out.AuthToken.Model.Response;
 
-namespace RbiIntegration.Service.Profitbase.Out.GetFile
+namespace RbiIntegration.Service.Profitbase.Out.BookingChangeStatus
 {
     /// <summary>
     /// Перевод заявки на бронирование в статус бронь

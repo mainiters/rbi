@@ -39,8 +39,8 @@ namespace RbiIntegration.Service.Profitbase.Out.BookingCreateService.Generator
 
             res.crmDealId = id.ToString();
             res.propertyId = data.First().Value.GetTypedColumnValue<string>("TrcObject_TrcObjectId");
-            res.sendNotificationOnSms = true;
-            res.sendNotificationOnEmail = false;
+            res.sendNotificationOnSms = data.First().Value.GetTypedColumnValue<bool>("TrcSendNotificationOnSms");
+            res.sendNotificationOnEmail = data.First().Value.GetTypedColumnValue<bool>("TrcSendNotificationOnEmail");
 
             return res;
         }

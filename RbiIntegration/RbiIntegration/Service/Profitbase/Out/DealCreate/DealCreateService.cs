@@ -1,7 +1,7 @@
 ﻿using RbiIntegration.Service.BaseClasses;
-using RbiIntegration.Service.Profitbase.Out.BookingCreateService.Model.Response;
-using RbiIntegration.Service.Profitbase.Out.BookingCreateService.Generator;
-using RbiIntegration.Service.Profitbase.Out.BookingCreateService.Handler;
+using RbiIntegration.Service.Profitbase.Out.DealCreateService.Model.Response;
+using RbiIntegration.Service.Profitbase.Out.DealCreateService.Generator;
+using RbiIntegration.Service.Profitbase.Out.DealCreateService.Handler;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -18,28 +18,28 @@ using Terrasoft.Web.Common;
 using BaseResponse = RbiIntegration.Service.BaseClasses.BaseResponse;
 using RbiIntegration.Service.Profitbase.Out.AuthToken.Model.Response;
 
-namespace RbiIntegration.Service.Profitbase.Out.BookingCreate
+namespace RbiIntegration.Service.Profitbase.Out.DealCreate
 {
     /// <summary>
-    /// Создание заявки на бронирование в статусе новая
+    /// создание заявки на основе CRM сделки
     /// </summary>
     [ServiceContract]
     [AspNetCompatibilityRequirements(RequirementsMode = AspNetCompatibilityRequirementsMode.Required)]
-    public class BookingCreateService : BaseOutService
+    public class DealCreateService : BaseOutService
     {
-        public BookingCreateService(UserConnection userConnection, IntegrationServiceParams serviceParams)
+        public DealCreateService(UserConnection userConnection, IntegrationServiceParams serviceParams)
            : base(userConnection, serviceParams)
         {
         }
 
         protected override BaseRequestGenerator GetRequestGenerator(params string[] id)
         {
-            return new BookingCreateServiceRequestGenerator(this._userConnection, this._serviceParams);
+            return new DealCreateServiceRequestGenerator(this._userConnection, this._serviceParams);
         }
 
         protected override BaseResponseHandler GetResponseHandler()
         {
-            return new BookingCreateServiceResponseHandler(this._userConnection, this._serviceParams);
+            return new DealCreateServiceResponseHandler(this._userConnection, this._serviceParams);
         }
 
         public override BaseResponse CallService(params string[] id)
@@ -54,7 +54,7 @@ namespace RbiIntegration.Service.Profitbase.Out.BookingCreate
 
             var model = generator.GenerateModel(id);
 
-            return this.CallService<BookingCreateServiceResponseModel>(model, handler, id);
+            return this.CallService<DealCreateServiceResponseModel>(model, handler, id);
         }
     }
 }

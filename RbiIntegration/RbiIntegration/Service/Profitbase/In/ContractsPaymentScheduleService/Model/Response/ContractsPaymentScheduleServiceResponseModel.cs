@@ -36,13 +36,13 @@ namespace RbiIntegration.Service.Profitbase.In.ContractsPaymentScheduleService.M
         /// Сумма всего по договору в рублях
         /// </summary>
         [DataMember]
-        public float amountContract { get; set; }
+        public decimal amountContract { get; set; }
 
         /// <summary>
         /// Остаток по договору на сегодняшний день в рублях
         /// </summary>
         [DataMember]
-        public float balanceContract { get; set; }
+        public decimal balanceContract { get; set; }
 
         /// <summary>
         /// Сумма ближайшего платежа по графику в рублях

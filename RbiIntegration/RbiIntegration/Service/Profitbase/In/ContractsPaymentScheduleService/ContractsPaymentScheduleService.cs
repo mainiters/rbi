@@ -72,7 +72,7 @@ namespace RbiIntegration.Service.Profitbase.In.ContractsPaymentScheduleService
                 }
 
                 response.contractNum = contract.GetTypedColumnValue<string>("Number");
-                response.amountContract = contract.GetTypedColumnValue<float>("TrcContractPrice");
+                response.amountContract = contract.GetTypedColumnValue<decimal>("TrcContractPrice");
 
                 esq = new EntitySchemaQuery(this.UserConnection.EntitySchemaManager, "TrcPaymentScheduleInFreeCalculation");
 
@@ -87,7 +87,7 @@ namespace RbiIntegration.Service.Profitbase.In.ContractsPaymentScheduleService
                     response.dateUntil = paymentScheduleInFreeCalculations.OrderByDescending(e => e.GetTypedColumnValue<DateTime>("TrcDatePayment")).First().GetTypedColumnValue<DateTime>("TrcDatePayment").ToString("dd.MM.yyyy");
                     response.balanceContract = response.amountContract - paymentScheduleInFreeCalculations
                         .Where(e => e.GetTypedColumnValue<bool>("TrcPaid"))
-                        .Sum(e => e.GetTypedColumnValue<float>("TrcAmountPayment"));
+                        .Sum(e => e.GetTypedColumnValue<decimal>("TrcAmountPayment"));
 
                     response.plannedPayments = new List<PlannedPayments>();
                     response.paidPayments = new List<PaidPayments>();

@@ -140,6 +140,7 @@
     <Compile Include="Service\BaseClasses\Extensions\StringExtension.cs" />
     <Compile Include="Service\BaseClasses\IntegrationServiceHelper.cs" />
     <Compile Include="Service\BaseClasses\IntegrationServiceParams.cs" />
+    <Compile Include="Service\BaseClasses\ProcessHelper.cs" />
     <Compile Include="Service\BaseClasses\ServiceWrapper.cs" />
     <Compile Include="Service\In\AddFileService\AddFileService.cs" />
     <Compile Include="Service\In\AddFileService\Model\Request\AddFileServiceRequestModel.cs" />
@@ -231,6 +232,11 @@
     <Compile Include="Service\Profitbase\Out\BookingChangeStatus\Model\Request\Data.cs" />
     <Compile Include="Service\Profitbase\Out\BookingChangeStatus\Model\Request\File.cs" />
     <Compile Include="Service\Profitbase\Out\BookingChangeStatus\Model\Response\BookingChangeStatusServiceResponseModel.cs" />
+    <Compile Include="Service\Profitbase\Out\DealCreate\DealCreateService.cs" />
+    <Compile Include="Service\Profitbase\Out\DealCreate\Generator\DealCreateServiceRequestGenerator.cs" />
+    <Compile Include="Service\Profitbase\Out\DealCreate\Handler\BookingCreateServiceResponseHandler.cs" />
+    <Compile Include="Service\Profitbase\Out\DealCreate\Model\Request\DealCreateServiceRequestModel.cs" />
+    <Compile Include="Service\Profitbase\Out\DealCreate\Model\Response\DealCreateServiceResponseModel.cs" />
     <Compile Include="Service\Profitbase\Out\BookingCreate\Generator\BookingCreateServiceRequestGenerator.cs" />
     <Compile Include="Service\Profitbase\Out\BookingCreate\BookingCreateService.cs" />
     <Compile Include="Service\Profitbase\Out\BookingCreate\Handler\BookingCreateServiceResponseHandler.cs" />
